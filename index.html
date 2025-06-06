@@ -79,6 +79,7 @@
             <option value="virtual_desktops">Escritorios virtuales</option>
             <option value="taskbar">Barra de tareas</option>
             <option value="settings">Configuración</option>
+            <option value="favorites">Favoritos</option> <!-- Nueva opción para favoritos -->
         </select>
     </div>
 
@@ -93,6 +94,7 @@
         <button class="category-button" data-category="virtual_desktops" onclick="selectCategory('virtual_desktops')">Escritorios virtuales</button>
         <button class="category-button" data-category="taskbar" onclick="selectCategory('taskbar')">Barra de tareas</button>
         <button class="category-button" data-category="settings" onclick="selectCategory('settings')">Configuración</button>
+        <button class="category-button" data-category="favorites" onclick="selectCategory('favorites')">Favoritos</button> <!-- Nuevo botón para favoritos -->
     </div>
 
     <!-- Shortcuts Grid -->
@@ -280,9 +282,9 @@
             // TASKBAR SHORTCUTS
             { category: "taskbar", key: "Mayús + clic en un botón de la barra de tareas", action: "Abrir una aplicación o abrir rápidamente otra instancia de una aplicación.", tags: ["abrir aplicación", "barra de tareas"] },
             { category: "taskbar", key: "Ctrl + Mayús + clic en un botón de la barra de tareas", action: "Abrir una aplicación como un administrador.", tags: ["administrador", "barra de tareas"] },
-            { category: "taskbar", key: "Mayús + clic con el botón derecho en un botón de la barra de tareas", action: "Mostrar el menú de la ventana de la aplicación.", tags: ["menú", "barra de tareas"] },
-            { category: "taskbar", key: "Mayús + clic con el botón derecho en un botón de la barra de tareas agrupadas", action: "Mostrar el menú de la ventana del grupo.", tags: ["grupo", "barra de tareas"] },
-            { category: "taskbar", key: "Ctrl + clic en un botón de la barra de tareas agrupadas", action: "Desplazarse a través de las ventanas del grupo.", tags: ["navegar", "barra de tareas"] },
+            { category: "taskbar", key: "Mayús + clic con el botón derecho en un botón de\n la barra de tareas", action: "Mostrar el menú de la ventana de la aplicación.", tags: ["menú", "barra de tareas"] },
+            { category: "taskbar", key: "Mayús + clic con el botón derecho en un botón de\n la barra de tareas agrupadas", action: "Mostrar el menú de la ventana del grupo.", tags: ["grupo", "barra de tareas"] },
+            { category: "taskbar", key: "Ctrl + clic en un botón de la barra de tareas\n agrupadas", action: "Desplazarse a través de las ventanas del grupo.", tags: ["navegar", "barra de tareas"] },
 
             // SETTINGS SHORTCUTS
             { category: "settings", key: "Tecla del logotipo de Windows + I", action: "Abrir Configuración.", tags: ["configuración", "abrir"] },
@@ -355,7 +357,13 @@
             const filtered = shortcuts.filter(shortcut => {
                 const matchesSearch = shortcut.key.toLowerCase().includes(searchTerm) ||
                                       shortcut.action.toLowerCase().includes(searchTerm) ||
-                                      shortcut.tags.some(tag => tag.toLowerCase().includes(searchTerm));
+                                      (shortcut.tags && shortcut.tags.some(tag => tag.toLowerCase().includes(searchTerm)));
+
+                // Nueva lógica para el filtro de favoritos
+                if (selectedCategory === 'favorites') {
+                    return favorites[shortcut.key] && matchesSearch;
+                }
+
                 const matchesCategory = selectedCategory === 'all' || shortcut.category === selectedCategory;
                 return matchesSearch && matchesCategory;
             });
@@ -399,11 +407,22 @@
                 showModal('¡Atajo añadido a favoritos! 🎉');
             }
             localStorage.setItem('favoriteShortcuts', JSON.stringify(favorites));
+            // Si el filtro actual es 'favorites', necesitamos volver a filtrar para actualizar la vista
+            if (categoryFilter.value === 'favorites') {
+                filterShortcuts();
+            }
         }
 
         // Renderizar todos los atajos al cargar la página
         document.addEventListener('DOMContentLoaded', () => {
-            renderShortcuts(shortcuts);
+            try {
+                // Para depuración: verifica si el array de atajos está cargado
+                console.log("Atajos cargados:", shortcuts.length);
+                renderShortcuts(shortcuts);
+            } catch (error) {
+                console.error("Error al renderizar atajos en DOMContentLoaded:", error);
+                shortcutsGrid.innerHTML = '<p class="text-center text-xl col-span-full text-red-400">¡Oops! Hubo un error al cargar los atajos. Por favor, revisa la consola para más detalles.</p>';
+            }
         });
     </script>
 </body>

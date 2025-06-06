@@ -21,9 +21,6 @@
             border-radius: 1rem;
             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
             transition: transform 0.2s ease-in-out;
-            display: flex; /* Usar flexbox */
-            flex-direction: column; /* Apilar elementos verticalmente */
-            justify-content: space-between; /* Espaciar contenido */
         }
         .shortcut-card:hover {
             transform: translateY(-5px);
@@ -38,7 +35,7 @@
         .category-button.active, .category-button:hover {
             background-color: #805ad5; /* Púrpura más brillante */
         }
-        .search-input, .form-input, .form-select {
+        .search-input {
             background-color: #4a5568;
             color: #e2e8f0;
             border-radius: 0.75rem;
@@ -67,13 +64,12 @@
     <header class="w-full max-w-4xl text-center mb-8">
         <h1 class="text-5xl font-extrabold gradient-bg text-transparent bg-clip-text pb-2">Atajos Pro ⚡️</h1>
         <p class="text-xl text-gray-400 mt-2">¡Domina Windows con estos trucos épicos!</p>
-        <p id="userIdDisplay" class="text-sm text-gray-500 mt-2">Cargando ID de usuario...</p>
     </header>
 
-    <!-- Controls: Search, Filter, Add Shortcut -->
-    <div class="w-full max-w-4xl mb-8 flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0 md:space-x-4">
-        <input type="text" id="searchInput" class="search-input flex-grow" placeholder="Busca atajos, acciones, etc..." onkeyup="filterShortcuts()">
-        <select id="categoryFilter" class="search-input w-full md:w-auto mt-4 md:mt-0" onchange="filterShortcuts()">
+    <!-- Search and Filter -->
+    <div class="w-full max-w-3xl mb-8 flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-4">
+        <input type="text" id="searchInput" class="search-input w-full md:flex-1" placeholder="Busca atajos, acciones, etc..." onkeyup="filterShortcuts()">
+        <select id="categoryFilter" class="search-input md:w-auto" onchange="filterShortcuts()">
             <option value="all">Todas las categorías</option>
             <option value="general">Generales</option>
             <option value="windows_logo">Tecla Windows</option>
@@ -83,11 +79,7 @@
             <option value="virtual_desktops">Escritorios virtuales</option>
             <option value="taskbar">Barra de tareas</option>
             <option value="settings">Configuración</option>
-            <option value="user_added">Añadidos por usuarios</option>
         </select>
-        <button onclick="showAddShortcutModal()" class="px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition duration-300 ease-in-out mt-4 md:mt-0">
-            <i class="fas fa-plus mr-2"></i> Nuevo Atajo
-        </button>
     </div>
 
     <!-- Shortcut Categories -->
@@ -101,73 +93,202 @@
         <button class="category-button" data-category="virtual_desktops" onclick="selectCategory('virtual_desktops')">Escritorios virtuales</button>
         <button class="category-button" data-category="taskbar" onclick="selectCategory('taskbar')">Barra de tareas</button>
         <button class="category-button" data-category="settings" onclick="selectCategory('settings')">Configuración</button>
-        <button class="category-button" data-category="user_added" onclick="selectCategory('user_added')">Añadidos por usuarios</button>
     </div>
 
     <!-- Shortcuts Grid -->
     <div id="shortcutsGrid" class="w-full max-w-5xl grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <!-- Shortcuts will be loaded here by JavaScript -->
-        <p class="text-center text-xl col-span-full text-gray-400">Cargando atajos...</p>
     </div>
 
     <!-- Message Modal -->
-    <div id="messageModal" class="modal fixed inset-0 flex items-center justify-center hidden z-50">
+    <div id="messageModal" class="modal fixed inset-0 flex items-center justify-center hidden">
         <div class="modal-content p-6 max-w-sm w-full text-center">
             <p id="modalMessage" class="text-lg font-semibold mb-4"></p>
             <button class="px-4 py-2 bg-purple-600 rounded-md hover:bg-purple-700" onclick="hideModal()">Entendido</button>
         </div>
     </div>
 
-    <!-- Add Shortcut Modal -->
-    <div id="addShortcutModal" class="modal fixed inset-0 flex items-center justify-center hidden z-40">
-        <div class="modal-content p-8 max-w-md w-full">
-            <h2 class="text-2xl font-bold mb-6 text-center text-purple-300">¡Agrega un Nuevo Atajo Épico!</h2>
-            <form id="addShortcutForm" onsubmit="event.preventDefault(); addShortcut()">
-                <div class="mb-4">
-                    <label for="newShortcutKey" class="block text-gray-300 text-sm font-bold mb-2">Tecla del Atajo:</label>
-                    <input type="text" id="newShortcutKey" class="form-input w-full" placeholder="Ej: Ctrl + Mayús + L" required>
-                </div>
-                <div class="mb-4">
-                    <label for="newShortcutAction" class="block text-gray-300 text-sm font-bold mb-2">Acción:</label>
-                    <textarea id="newShortcutAction" class="form-input w-full h-24 resize-y" placeholder="Ej: Bloquear la pantalla" required></textarea>
-                </div>
-                <div class="mb-6">
-                    <label for="newShortcutCategory" class="block text-gray-300 text-sm font-bold mb-2">Categoría:</label>
-                    <select id="newShortcutCategory" class="form-select w-full" required>
-                        <option value="general">Generales</option>
-                        <option value="windows_logo">Tecla Windows</option>
-                        <option value="command_prompt">Símbolo del sistema</option>
-                        <option value="dialog_boxes">Cuadros de diálogo</option>
-                        <option value="file_explorer">Explorador de archivos</option>
-                        <option value="virtual_desktops">Escritorios virtuales</option>
-                        <option value="taskbar">Barra de tareas</option>
-                        <option value="settings">Configuración</option>
-                        <option value="user_added">Añadidos por usuarios</option>
-                    </select>
-                </div>
-                <div class="flex justify-end space-x-4">
-                    <button type="button" onclick="hideAddShortcutModal()" class="px-5 py-2 bg-gray-600 rounded-md hover:bg-gray-700 transition duration-300 ease-in-out">Cancelar</button>
-                    <button type="submit" class="px-5 py-2 bg-purple-600 rounded-md hover:bg-purple-700 transition duration-300 ease-in-out">Guardar Atajo</button>
-                </div>
-            </form>
-        </div>
-    </div>
+    <script>
+        // Array de objetos con los atajos de teclado
+        const shortcuts = [
+            // GENERAL SHORTCUTS
+            { category: "general", key: "Ctrl + X", action: "Cortar el elemento seleccionado.", tags: ["cortar", "seleccionar"] },
+            { category: "general", key: "Ctrl + C (o Ctrl + Insertar)", action: "Copiar el elemento seleccionado.", tags: ["copiar", "seleccionar"] },
+            { category: "general", key: "Ctrl + V (o Mayús + Insertar)", action: "Pegar el elemento seleccionado.", tags: ["pegar", "seleccionar"] },
+            { category: "general", key: "Ctrl + Z", action: "Deshacer una acción.", tags: ["deshacer"] },
+            { category: "general", key: "Alt + Tabulador", action: "Cambiar entre aplicaciones abiertas.", tags: ["cambiar", "aplicaciones"] },
+            { category: "general", key: "Alt + F4", action: "Cerrar el elemento activo o salir de la aplicación activa.", tags: ["cerrar", "aplicación"] },
+            { category: "general", key: "Tecla del logotipo de Windows + L", action: "Bloquear el equipo.", tags: ["bloquear", "equipo"] },
+            { category: "general", key: "Tecla del logotipo de Windows + D", action: "Mostrar y ocultar el escritorio.", tags: ["escritorio", "mostrar", "ocultar"] },
+            { category: "general", key: "F2", action: "Cambiar el nombre del elemento seleccionado.", tags: ["renombrar", "archivo", "carpeta"] },
+            { category: "general", key: "F3", action: "Buscar un archivo o una carpeta en el Explorador de archivos.", tags: ["buscar", "archivo", "carpeta"] },
+            { category: "general", key: "F4", action: "Mostrar la lista de la barra de direcciones en el Explorador de archivos.", tags: ["explorador", "dirección"] },
+            { category: "general", key: "F5", action: "Actualizar la ventana activa.", tags: ["actualizar"] },
+            { category: "general", key: "F6", action: "Desplazarse por los elementos de la pantalla en una ventana o en el escritorio.", tags: ["navegar", "elementos"] },
+            { category: "general", key: "F10", action: "Activar la barra de menús en la aplicación activa.", tags: ["menú", "activar"] },
+            { category: "general", key: "Alt + F8", action: "Mostrar la contraseña en la pantalla de inicio de sesión.", tags: ["contraseña", "iniciar sesión"] },
+            { category: "general", key: "Alt + Esc", action: "Desplazarse por los elementos en el orden en que se abrieron.", tags: ["navegar", "elementos"] },
+            { category: "general", key: "Alt + letra subrayada", action: "Ejecutar el comando correspondiente a esa letra.", tags: ["comando"] },
+            { category: "general", key: "Alt + Entrar", action: "Ver las propiedades del elemento seleccionado.", tags: ["propiedades"] },
+            { category: "general", key: "Alt + Barra espaciadora", action: "Abrir el menú contextual de la ventana activa.", tags: ["menú", "ventana"] },
+            { category: "general", key: "Alt + Flecha izquierda", action: "Volver.", tags: ["volver"] },
+            { category: "general", key: "Alt + Flecha derecha", action: "Ir hacia delante.", tags: ["adelante"] },
+            { category: "general", key: "Alt + Re Pág", action: "Subir una pantalla.", tags: ["desplazar", "arriba"] },
+            { category: "general", key: "Alt + Av Pág", action: "Bajar una pantalla.", tags: ["desplazar", "abajo"] },
+            { category: "general", key: "Ctrl + F4", action: "Cerrar el documento activo (en las aplicaciones que están abiertas a pantalla completa y que te permiten tener abiertos varios documentos simultáneamente).", tags: ["cerrar", "documento"] },
+            { category: "general", key: "Ctrl + A", action: "Seleccionar todos los elementos en un documento o una ventana.", tags: ["seleccionar", "todo"] },
+            { category: "general", key: "Ctrl + D (o Supr)", action: "Eliminar el elemento seleccionado y moverlo a la papelera de reciclaje.", tags: ["eliminar", "papelera"] },
+            { category: "general", key: "Ctrl + R (o F5)", action: "Actualizar la ventana activa.", tags: ["actualizar"] },
+            { category: "general", key: "Ctrl + Y", action: "Rehacer una acción.", tags: ["rehacer"] },
+            { category: "general", key: "Ctrl + Flecha derecha", action: "Mover el cursor al principio de la palabra siguiente.", tags: ["cursor", "palabra"] },
+            { category: "general", key: "Ctrl + Flecha izquierda", action: "Mover el cursor al principio de la palabra anterior.", tags: ["cursor", "palabra"] },
+            { category: "general", key: "Ctrl + Flecha abajo", action: "Mover el cursor al principio del párrafo siguiente.", tags: ["cursor", "párrafo"] },
+            { category: "general", key: "Ctrl + Flecha arriba", action: "Mover el cursor al principio del párrafo anterior.", tags: ["cursor", "párrafo"] },
+            { category: "general", key: "Ctrl + Alt + Tabulador", action: "Usar las teclas de dirección para cambiar entre todas las aplicaciones abiertas.", tags: ["cambiar", "aplicaciones"] },
+            { category: "general", key: "Alt + Mayús + teclas de dirección", action: "Cuando un grupo o un icono tiene el foco en el menú Inicio, moverlo en la dirección especificada.", tags: ["menú inicio", "mover"] },
+            { category: "general", key: "Ctrl + Mayús + teclas de dirección", action: "Cuando una ventana tenga el foco en el menú Inicio, muévelo a otra ventana para crear una carpeta.", tags: ["menú inicio", "carpeta"] },
+            { category: "general", key: "Ctrl + teclas de dirección", action: "Cambiar el tamaño del menú Inicio cuando se abre.", tags: ["menú inicio", "tamaño"] },
+            { category: "general", key: "Ctrl + tecla de dirección (para desplazarse a un elemento) + Barra espaciadora", action: "Seleccionar varios elementos individuales en una ventana o en el escritorio.", tags: ["seleccionar", "varios"] },
+            { category: "general", key: "Ctrl + Mayús con una tecla de dirección", action: "Seleccionar un bloque de texto.", tags: ["seleccionar", "texto"] },
+            { category: "general", key: "Ctrl + Esc", action: "Abrir Inicio.", tags: ["inicio", "abrir"] },
+            { category: "general", key: "Ctrl + Mayús + Esc", action: "Abrir el Administrador de tareas.", tags: ["administrador de tareas", "abrir"] },
+            { category: "general", key: "Ctrl + Mayús", action: "Cambiar la distribución del teclado cuando hay varias distribuciones del teclado disponibles.", tags: ["teclado", "idioma"] },
+            { category: "general", key: "Ctrl + Barra espaciadora", action: "Activar o desactivar el Editor de métodos de entrada (IME) para chino.", tags: ["IME", "chino"] },
+            { category: "general", key: "Mayús + F10", action: "Mostrar el menú contextual del elemento seleccionado.", tags: ["menú contextual"] },
+            { category: "general", key: "Mayús con una tecla de dirección", action: "Seleccionar varios elementos en una ventana o en el escritorio, o bien seleccionar texto en un documento.", tags: ["seleccionar", "varios", "texto"] },
+            { category: "general", key: "Mayús + Supr", action: "Eliminar el elemento seleccionado sin moverlo a la papelera de reciclaje.", tags: ["eliminar", "permanente"] },
+            { category: "general", key: "Flecha derecha", action: "Abrir el siguiente menú de la derecha o abrir un submenú.", tags: ["menú", "submenú"] },
+            { category: "general", key: "Flecha izquierda", action: "Abrir el siguiente menú de la izquierda o cerrar un submenú.", tags: ["menú", "submenú"] },
+            { category: "general", key: "Esc", action: "Detener la tarea actual o salir de ella.", tags: ["detener", "salir"] },
+            { category: "general", key: "Impr Pant", action: "Tomar una captura de pantalla de la pantalla completa y copiarla en el Portapapeles.", tags: ["captura de pantalla", "portapapeles"] },
 
+            // WINDOWS LOGO KEY SHORTCUTS
+            { category: "windows_logo", key: "Tecla del logotipo de Windows", action: "Abrir o cerrar Inicio.", tags: ["inicio", "abrir", "cerrar"] },
+            { category: "windows_logo", key: "Tecla del logotipo de Windows + A", action: "Abrir el Centro de actividades.", tags: ["centro de actividades"] },
+            { category: "windows_logo", key: "Tecla del logotipo de Windows + B", action: "Llevar el foco al área de notificación.", tags: ["notificación", "foco"] },
+            { category: "windows_logo", key: "Tecla del logotipo de Windows + C", action: "Abrir Cortana en modo de escucha.", tags: ["cortana", "voz"] },
+            { category: "windows_logo", key: "Tecla del logotipo de Windows + Mayús + C", action: "Abrir el menú de botones de acceso.", tags: ["acceso", "menú"] },
+            { category: "windows_logo", key: "Tecla del logotipo de Windows + D", action: "Mostrar y ocultar el escritorio.", tags: ["escritorio", "mostrar", "ocultar"] },
+            { category: "windows_logo", key: "Tecla del logotipo de Windows + Alt + D", action: "Mostrar y ocultar la fecha y hora en el escritorio.", tags: ["fecha", "hora", "escritorio"] },
+            { category: "windows_logo", key: "Tecla del logotipo de Windows + E", action: "Abrir el Explorador de archivos.", tags: ["explorador de archivos", "abrir"] },
+            { category: "windows_logo", key: "Tecla del logotipo de Windows + F", action: "Abrir el Centro de opiniones y hacer una captura de pantalla.", tags: ["opiniones", "captura de pantalla"] },
+            { category: "windows_logo", key: "Tecla del logotipo de Windows + G", action: "Abrir la barra de juegos con un juego abierto.", tags: ["barra de juegos", "juegos"] },
+            { category: "windows_logo", key: "Tecla del logotipo de Windows + H", action: "Iniciar dictado.", tags: ["dictado", "voz"] },
+            { category: "windows_logo", key: "Tecla del logotipo de Windows + I", action: "Abrir Configuración.", tags: ["configuración", "abrir"] },
+            { category: "windows_logo", key: "Tecla del logotipo de Windows + J", action: "Establecer el foco en una sugerencia de Windows cuando haya una disponible.", tags: ["sugerencia", "foco"] },
+            { category: "windows_logo", key: "Tecla del logotipo de Windows + K", action: "Abrir la acción rápida Conectar.", tags: ["conectar", "acción rápida"] },
+            { category: "windows_logo", key: "Tecla del logotipo de Windows + L", action: "Bloquear el equipo o cambiar de cuenta.", tags: ["bloquear", "cuenta"] },
+            { category: "windows_logo", key: "Tecla del logotipo de Windows + M", action: "Minimizar todas las ventanas.", tags: ["minimizar", "ventanas"] },
+            { category: "windows_logo", key: "Tecla del logotipo de Windows + O", action: "Bloquear la orientación del dispositivo.", tags: ["orientación", "dispositivo"] },
+            { category: "windows_logo", key: "Tecla del logotipo de Windows + P", action: "Elegir un modo de presentación.", tags: ["presentación"] },
+            { category: "windows_logo", key: "Tecla del logotipo de Windows + Ctrl + Q", action: "Abrir Asistencia rápida.", tags: ["asistencia", "ayuda"] },
+            { category: "windows_logo", key: "Tecla del logotipo de Windows + R", action: "Abrir el cuadro de diálogo Ejecutar", tags: ["ejecutar", "cuadro de diálogo"] },
+            { category: "windows_logo", key: "Tecla del logotipo de Windows + S", action: "Abrir la búsqueda.", tags: ["buscar", "abrir"] },
+            { category: "windows_logo", key: "Tecla del logotipo de Windows + Mayús + S", action: "Realizar una captura de pantalla de parte de la pantalla.", tags: ["captura de pantalla", "recorte"] },
+            { category: "windows_logo", key: "Tecla del logotipo de Windows + T", action: "Desplazarse por las aplicaciones de la barra de tareas.", tags: ["barra de tareas", "navegar"] },
+            { category: "windows_logo", key: "Tecla del logotipo de Windows + U", action: "Abrir el Centro de accesibilidad.", tags: ["accesibilidad", "centro"] },
+            { category: "windows_logo", key: "Tecla del logotipo de Windows + V", action: "Abrir el Portapapeles.", tags: ["portapapeles", "historial"] },
+            { category: "windows_logo", key: "Tecla del logotipo de Windows + Mayús + V", action: "Desplazarse por las notificaciones.", tags: ["notificaciones"] },
+            { category: "windows_logo", key: "Tecla del logotipo de Windows + X", action: "Abrir el menú Vínculo rápido.", tags: ["menú rápido", "acceso"] },
+            { category: "windows_logo", key: "Tecla del logotipo de Windows + Y", action: "Cambiar entrada entre Windows Mixed Reality y el escritorio.", tags: ["realidad mixta", "escritorio"] },
+            { category: "windows_logo", key: "Tecla del logotipo de Windows + Z", action: "Mostrar los comandos disponibles en una aplicación en modo de pantalla completa.", tags: ["pantalla completa", "comandos"] },
+            { category: "windows_logo", key: "Tecla del logotipo de Windows + punto (.) o punto y coma (;)", action: "Abrir el panel de emojis.", tags: ["emoji", "panel"] },
+            { category: "windows_logo", key: "Tecla del logotipo de Windows + coma (,)", action: "Ojear temporalmente el escritorio.", tags: ["escritorio", "vista previa"] },
+            { category: "windows_logo", key: "Tecla del logotipo de Windows + Pausa", action: "Mostrar el cuadro de diálogo Propiedades del sistema", tags: ["propiedades del sistema"] },
+            { category: "windows_logo", key: "Tecla del logotipo de Windows + Ctrl + F", action: "Buscar equipos (en una red).", tags: ["buscar", "red"] },
+            { category: "windows_logo", key: "Tecla del logotipo de Windows + Mayús + M", action: "Restaurar las ventanas minimizadas en el escritorio.", tags: ["restaurar", "ventanas"] },
+            { category: "windows_logo", key: "Tecla del logotipo de Windows + número", action: "Abrir el escritorio e iniciar la aplicación anclada a la barra de tareas en la posición indicada por el número. Si la aplicación ya se está ejecutando, cambiar a esa aplicación.", tags: ["barra de tareas", "abrir", "aplicación"] },
+            { category: "windows_logo", key: "Tecla del logotipo de Windows + Mayús + número", action: "Abrir el escritorio e iniciar una nueva instancia de la aplicación anclada a la barra de tareas en la posición indicada por el número.", tags: ["barra de tareas", "nueva instancia"] },
+            { category: "windows_logo", key: "Tecla del logotipo de Windows + Ctrl + número", action: "Abrir el escritorio y cambiar a la última ventana activa de la aplicación anclada a la barra de tareas en la posición indicada por el número.", tags: ["barra de tareas", "cambiar ventana"] },
+            { category: "windows_logo", key: "Tecla del logotipo de Windows + Alt + número", action: "Abrir el escritorio y abrir la lista de accesos directos de la aplicación anclada a la barra de tareas en la posición indicada por el número.", tags: ["barra de tareas", "lista de accesos"] },
+            { category: "windows_logo", key: "Tecla del logotipo de Windows + Ctrl + Mayús + número", action: "Abrir el escritorio y abrir una nueva instancia de la aplicación ubicada en la posición determinada en la barra de tareas como administrador.", tags: ["barra de tareas", "administrador"] },
+            { category: "windows_logo", key: "Tecla del logotipo de Windows + Tabulador", action: "Abrir la Vista de tareas.", tags: ["vista de tareas"] },
+            { category: "windows_logo", key: "Tecla del logotipo de Windows + Flecha arriba", action: "Maximizar la ventana.", tags: ["maximizar"] },
+            { category: "windows_logo", key: "Tecla del logotipo de Windows + Flecha abajo", action: "Quitar la aplicación actual de la pantalla o minimizar la ventana del escritorio.", tags: ["minimizar", "quitar"] },
+            { category: "windows_logo", key: "Tecla del logotipo de Windows + Flecha izquierda", action: "Maximizar la ventana de la aplicación o del escritorio en el lado izquierdo de la pantalla.", tags: ["maximizar", "izquierda"] },
+            { category: "windows_logo", key: "Tecla del logotipo de Windows + Flecha derecha", action: "Maximizar la ventana de la aplicación o del escritorio en el lado derecho de la pantalla.", tags: ["maximizar", "derecha"] },
+            { category: "windows_logo", key: "Tecla del logotipo de Windows + Inicio", action: "Minimizar todo excepto la ventana del escritorio activa (repetir la acción para restaurar todas las ventanas).", tags: ["minimizar", "restaurar"] },
+            { category: "windows_logo", key: "Tecla del logotipo de Windows + Mayús + Flecha arriba", action: "Expandir la ventana del escritorio a la parte superior e inferior de la pantalla.", tags: ["expandir"] },
+            { category: "windows_logo", key: "Tecla del logotipo de Windows + Mayús + Flecha abajo", action: "Restaurar/minimizar las ventanas del escritorio activas verticalmente conservando el ancho.", tags: ["restaurar", "minimizar"] },
+            { category: "windows_logo", key: "Tecla del logotipo de Windows + Mayús + Flecha izquierda o derecha", action: "Mover una aplicación o ventana del escritorio de un monitor a otro.", tags: ["monitor", "mover"] },
+            { category: "windows_logo", key: "Tecla del logotipo de Windows + Barra espaciadora", action: "Cambiar entre el idioma de entrada y la distribución del teclado.", tags: ["idioma", "teclado"] },
+            { category: "windows_logo", key: "Tecla del logotipo de Windows + Ctrl + Barra espaciadora", action: "Cambiar a una entrada seleccionada anteriormente.", tags: ["idioma", "teclado"] },
+            { category: "windows_logo", key: "Tecla del logotipo de Windows + Ctrl + Entrar", action: "Activar Narrador.", tags: ["narrador", "accesibilidad"] },
+            { category: "windows_logo", key: "Tecla del logotipo de Windows + Más (+)", action: "Abrir la Lupa.", tags: ["lupa", "accesibilidad"] },
+            { category: "windows_logo", key: "Tecla del logotipo de Windows + barra diagonal (/)", action: "Comienza la reconversión de IME.", tags: ["IME"] },
+            { category: "windows_logo", key: "Tecla del logotipo de Windows + Ctrl + V", action: "Abrir notificaciones animadas.", tags: ["notificaciones"] },
+            { category: "windows_logo", key: "Tecla del logotipo de Windows + Ctrl + Mayús + B", action: "Activar el PC desde una pantalla negra o en blanco", tags: ["pantalla", "activar"] },
 
-    <script type="module">
-        // Importar funciones de Firebase
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, collection, query, where, getDocs, addDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+            // COMMAND PROMPT SHORTCUTS
+            { category: "command_prompt", key: "Ctrl + C (o Ctrl + Insertar)", action: "Copiar el texto seleccionado.", tags: ["copiar", "símbolo del sistema"] },
+            { category: "command_prompt", key: "Ctrl + V (o Mayús + Insertar)", action: "Pegar el texto seleccionado.", tags: ["pegar", "símbolo del sistema"] },
+            { category: "command_prompt", key: "Ctrl + M", action: "Acceder al modo de marca.", tags: ["modo de marca", "símbolo del sistema"] },
+            { category: "command_prompt", key: "Alt + tecla de selección", action: "Iniciar la selección en modo de bloque.", tags: ["selección", "símbolo del sistema"] },
+            { category: "command_prompt", key: "Teclas de dirección", action: "Mover el cursor en la dirección especificada.", tags: ["cursor", "símbolo del sistema"] },
+            { category: "command_prompt", key: "Re Pág", action: "Subir el cursor una página.", tags: ["desplazar", "símbolo del sistema"] },
+            { category: "command_prompt", key: "Av Pág", action: "Bajar el cursor una página.", tags: ["desplazar", "símbolo del sistema"] },
+            { category: "command_prompt", key: "Ctrl + Inicio (modo de marca)", action: "Mover el cursor al principio del búfer.", tags: ["cursor", "símbolo del sistema"] },
+            { category: "command_prompt", key: "Ctrl + Fin (modo de marca)", action: "Mover el cursor al final del búfer.", tags: ["cursor", "símbolo del sistema"] },
+            { category: "command_prompt", key: "Ctrl + Flecha arriba", action: "Subir una línea en el historial de salida.", tags: ["historial", "símbolo del sistema"] },
+            { category: "command_prompt", key: "Ctrl + Flecha abajo", action: "Bajar una línea en el historial de salida.", tags: ["historial", "símbolo del sistema"] },
+            { category: "command_prompt", key: "Ctrl + Inicio (navegación por el historial)", action: "Si la línea de comandos está vacía, mueve la ventanilla a la parte superior del búfer. De lo contrario, elimina todos los caracteres a la izquierda del cursor en la línea de comandos.", tags: ["historial", "símbolo del sistema"] },
+            { category: "command_prompt", key: "Ctrl + Fin (navegación por el historial)", action: "Si la línea de comandos está vacía, mueve la ventanilla a la línea de comandos. De lo contrario, elimina todos los caracteres que se encuentran a la derecha del cursor en la línea de comandos.", tags: ["historial", "símbolo del sistema"] },
 
-        // Variables globales para Firebase y la aplicación
-        let app;
-        let db;
-        let auth;
-        let userId;
-        let appId; // Ahora appId es una variable global
-        let allShortcuts = []; // Almacenará todos los atajos cargados desde Firestore
-        let favorites = JSON.parse(localStorage.getItem('favoriteShortcuts')) || {}; // Favoritos locales
+            // DIALOG BOXES SHORTCUTS
+            { category: "dialog_boxes", key: "F4", action: "Mostrar los elementos de la lista activa.", tags: ["lista", "cuadro de diálogo"] },
+            { category: "dialog_boxes", key: "Ctrl + Tabulador", action: "Avanzar a través de las pestañas.", tags: ["pestañas", "cuadro de diálogo"] },
+            { category: "dialog_boxes", key: "Ctrl + Mayús + Tabulador", action: "Retroceder a través de las pestañas.", tags: ["pestañas", "cuadro de diálogo"] },
+            { category: "dialog_boxes", key: "Ctrl + número (número 1-9)", action: "Desplazarse a la enésima pestaña.", tags: ["pestañas", "cuadro de diálogo"] },
+            { category: "dialog_boxes", key: "Tabulador", action: "Avanzar a través de las opciones.", tags: ["opciones", "cuadro de diálogo"] },
+            { category: "dialog_boxes", key: "Mayús + Tabulador", action: "Retroceder a través de las opciones.", tags: ["opciones", "cuadro de diálogo"] },
+            { category: "dialog_boxes", key: "Alt + letra subrayada", action: "Ejecutar el comando (o seleccionar la opción) que se usa con la letra.", tags: ["comando", "cuadro de diálogo"] },
+            { category: "dialog_boxes", key: "Barra espaciadora", action: "Si la opción activa es una casilla, activarla o desactivarla.", tags: ["casilla", "cuadro de diálogo"] },
+            { category: "dialog_boxes", key: "Retroceso", action: "Abrir una carpeta de un nivel superior si hay una carpeta seleccionada en el cuadro de diálogo Guardar como o Abrir.", tags: ["carpeta", "guardar", "abrir"] },
+            { category: "dialog_boxes", key: "Teclas de dirección", action: "Si la opción activa es un grupo de botones de opción, seleccionar un botón.", tags: ["radio button", "cuadro de diálogo"] },
+
+            // FILE EXPLORER SHORTCUTS
+            { category: "file_explorer", key: "Alt + D", action: "Seleccionar la barra de direcciones.", tags: ["dirección", "explorador"] },
+            { category: "file_explorer", key: "Ctrl + E", action: "Seleccionar el cuadro de búsqueda.", tags: ["buscar", "explorador"] },
+            { category: "file_explorer", key: "Ctrl + F", action: "Seleccionar el cuadro de búsqueda.", tags: ["buscar", "explorador"] },
+            { category: "file_explorer", key: "Ctrl + N", action: "Abrir una ventana nueva.", tags: ["ventana", "explorador"] },
+            { category: "file_explorer", key: "Ctrl + W", action: "Cierre la ventana activa.", tags: ["cerrar", "ventana", "explorador"] },
+            { category: "file_explorer", key: "Ctrl + rueda del ratón", action: "Cambiar el tamaño y la apariencia de los iconos de archivos y carpetas.", tags: ["iconos", "tamaño", "explorador"] },
+            { category: "file_explorer", key: "Ctrl + Mayús + E", action: "Mostrar todas las carpetas situadas sobre la carpeta seleccionada.", tags: ["carpetas", "explorador"] },
+            { category: "file_explorer", key: "Ctrl + Mayús + N", action: "Crear una carpeta nueva.", tags: ["nueva carpeta", "explorador"] },
+            { category: "file_explorer", key: "Bloq Num + asterisco (*)", action: "Mostrar todas las subcarpetas de la carpeta seleccionada.", tags: ["subcarpetas", "explorador"] },
+            { category: "file_explorer", key: "Bloq Num + signo más (+)", action: "Mostrar el contenido de la carpeta seleccionada.", tags: ["contenido", "explorador"] },
+            { category: "file_explorer", key: "Bloq Num + signo menos (-)", action: "Contraer la carpeta seleccionada.", tags: ["contraer", "explorador"] },
+            { category: "file_explorer", key: "Alt + P", action: "Mostrar el panel de vista previa.", tags: ["vista previa", "explorador"] },
+            { category: "file_explorer", key: "Alt + Entrar", action: "Abrir el cuadro de diálogo Propiedades del elemento seleccionado.", tags: ["propiedades", "explorador"] },
+            { category: "file_explorer", key: "Alt + Flecha derecha", action: "Ver la carpeta siguiente.", tags: ["navegar", "explorador"] },
+            { category: "file_explorer", key: "Alt + Flecha arriba", action: "Ver la carpeta que contenía la carpeta.", tags: ["navegar", "explorador"] },
+            { category: "file_explorer", key: "Alt + Flecha izquierda", action: "Ver la carpeta anterior.", tags: ["navegar", "explorador"] },
+            { category: "file_explorer", key: "Retroceso", action: "Ver la carpeta anterior.", tags: ["navegar", "explorador"] },
+            { category: "file_explorer", key: "Flecha derecha", action: "Mostrar la selección actual si está contraída o seleccionar la primera subcarpeta.", tags: ["navegar", "explorador"] },
+            { category: "file_explorer", key: "Flecha izquierda", action: "Contraer la selección actual si está expandida o seleccionar la carpeta que contenía la carpeta.", tags: ["navegar", "explorador"] },
+            { category: "file_explorer", key: "Fin", action: "Mostrar la parte inferior de la ventana activa.", tags: ["desplazar", "explorador"] },
+            { category: "file_explorer", key: "Inicio", action: "Mostrar la parte superior de la ventana activa.", tags: ["desplazar", "explorador"] },
+            { category: "file_explorer", key: "F11", action: "Maximizar o minimizar la ventana activa.", tags: ["maximizar", "minimizar", "explorador"] },
+
+            // VIRTUAL DESKTOPS SHORTCUTS
+            { category: "virtual_desktops", key: "Tecla del logotipo de Windows + Tabulador", action: "Abrir la Vista de tareas.", tags: ["vista de tareas", "escritorios virtuales"] },
+            { category: "virtual_desktops", key: "Tecla del logotipo de Windows + Ctrl + D", action: "Agregar un escritorio virtual.", tags: ["nuevo escritorio", "escritorios virtuales"] },
+            { category: "virtual_desktops", key: "Tecla del logotipo de Windows + Ctrl + Flecha derecha", action: "Alternar entre los escritorios virtuales que has creado a la derecha.", tags: ["cambiar escritorio", "escritorios virtuales"] },
+            { category: "virtual_desktops", key: "Tecla del logotipo de Windows + Ctrl + Flecha izquierda", action: "Alternar entre los escritorios virtuales que has creado a la izquierda.", tags: ["cambiar escritorio", "escritorios virtuales"] },
+            { category: "virtual_desktops", key: "Tecla del logotipo de Windows + Ctrl + F4", action: "Cerrar el escritorio virtual que estás usando.", tags: ["cerrar escritorio", "escritorios virtuales"] },
+
+            // TASKBAR SHORTCUTS
+            { category: "taskbar", key: "Mayús + clic en un botón de la barra de tareas", action: "Abrir una aplicación o abrir rápidamente otra instancia de una aplicación.", tags: ["abrir aplicación", "barra de tareas"] },
+            { category: "taskbar", key: "Ctrl + Mayús + clic en un botón de la barra de tareas", action: "Abrir una aplicación como un administrador.", tags: ["administrador", "barra de tareas"] },
+            { category: "taskbar", key: "Mayús + clic con el botón derecho en un botón de la barra de tareas", action: "Mostrar el menú de la ventana de la aplicación.", tags: ["menú", "barra de tareas"] },
+            { category: "taskbar", key: "Mayús + clic con el botón derecho en un botón de la barra de tareas agrupadas", action: "Mostrar el menú de la ventana del grupo.", tags: ["grupo", "barra de tareas"] },
+            { category: "taskbar", key: "Ctrl + clic en un botón de la barra de tareas agrupadas", action: "Desplazarse a través de las ventanas del grupo.", tags: ["navegar", "barra de tareas"] },
+
+            // SETTINGS SHORTCUTS
+            { category: "settings", key: "Tecla del logotipo de Windows + I", action: "Abrir Configuración.", tags: ["configuración", "abrir"] },
+            { category: "settings", key: "Retroceso", action: "Volver a la página principal de Configuración.", tags: ["volver", "configuración"] },
+            { category: "settings", key: "Escribir en cualquier página con el cuadro de búsqueda", action: "Buscar en Configuración.", tags: ["buscar", "configuración"] }
+        ];
 
         // Obtener elementos del DOM
         const shortcutsGrid = document.getElementById('shortcutsGrid');
@@ -176,12 +297,9 @@
         const categoryButtons = document.querySelectorAll('.category-button');
         const messageModal = document.getElementById('messageModal');
         const modalMessage = document.getElementById('modalMessage');
-        const addShortcutModal = document.getElementById('addShortcutModal');
-        const addShortcutForm = document.getElementById('addShortcutForm');
-        const newShortcutKey = document.getElementById('newShortcutKey');
-        const newShortcutAction = document.getElementById('newShortcutAction'); // Asegurado que esto apunta a la acción
-        const newShortcutCategory = document.getElementById('newShortcutCategory');
-        const userIdDisplay = document.getElementById('userIdDisplay');
+
+        // Estado para almacenar atajos favoritos (simulado con localStorage)
+        let favorites = JSON.parse(localStorage.getItem('favoriteShortcuts')) || {};
 
         /**
          * Muestra un modal con un mensaje.
@@ -200,22 +318,6 @@
         }
 
         /**
-         * Muestra el modal para agregar un nuevo atajo.
-         */
-        window.showAddShortcutModal = function() {
-            addShortcutModal.classList.remove('hidden');
-            // Resetear el formulario cada vez que se abre
-            addShortcutForm.reset();
-        }
-
-        /**
-         * Oculta el modal para agregar un nuevo atajo.
-         */
-        window.hideAddShortcutModal = function() {
-            addShortcutModal.classList.add('hidden');
-        }
-
-        /**
          * Renderiza los atajos de teclado en la cuadrícula.
          * @param {Array} shortcutsToRender - El array de atajos a renderizar.
          */
@@ -227,24 +329,17 @@
             }
 
             shortcutsToRender.forEach(shortcut => {
-                // Si el atajo no tiene un ID de Firestore, usamos la clave para el ID del DOM
-                const shortcutId = shortcut.id || shortcut.key.replace(/\s+/g, '-').toLowerCase();
                 const isFavorite = favorites[shortcut.key];
                 const card = document.createElement('div');
-                card.id = `shortcut-${shortcutId}`; // Asignar un ID único
                 card.className = 'shortcut-card p-6 flex flex-col justify-between';
                 card.innerHTML = `
                     <div>
                         <h3 class="text-xl font-bold mb-2 text-purple-300">${shortcut.key}</h3>
                         <p class="text-gray-300">${shortcut.action}</p>
-                        ${shortcut.category === 'user_added' ? `<p class="text-sm text-gray-500 mt-2">Agregado por: ${shortcut.addedBy || 'Desconocido'}</p>` : ''}
                     </div>
-                    <div class="flex justify-between items-center mt-4">
-                        <span class="text-sm text-gray-400 capitalize">${shortcut.category.replace(/_/g, ' ')}</span>
-                        <button class="favorite-btn text-2xl ${isFavorite ? 'active' : ''}" data-key="${shortcut.key}" onclick="toggleFavorite('${shortcut.key}', this)">
-                            <i class="${isFavorite ? 'fas' : 'far'} fa-star"></i>
-                        </button>
-                    </div>
+                    <button class="favorite-btn mt-4 self-end text-2xl ${isFavorite ? 'active' : ''}" data-key="${shortcut.key}" onclick="toggleFavorite('${shortcut.key}', this)">
+                        <i class="${isFavorite ? 'fas' : 'far'} fa-star"></i>
+                    </button>
                 `;
                 shortcutsGrid.appendChild(card);
             });
@@ -253,15 +348,14 @@
         /**
          * Filtra y busca atajos según la entrada del usuario y la categoría seleccionada.
          */
-        window.filterShortcuts = function() {
+        function filterShortcuts() {
             const searchTerm = searchInput.value.toLowerCase();
             const selectedCategory = categoryFilter.value;
 
-            const filtered = allShortcuts.filter(shortcut => {
+            const filtered = shortcuts.filter(shortcut => {
                 const matchesSearch = shortcut.key.toLowerCase().includes(searchTerm) ||
                                       shortcut.action.toLowerCase().includes(searchTerm) ||
-                                      (shortcut.tags && shortcut.tags.some(tag => tag.toLowerCase().includes(searchTerm))) ||
-                                      (shortcut.addedBy && shortcut.addedBy.toLowerCase().includes(searchTerm)); // Permitir buscar por quien agregó
+                                      shortcut.tags.some(tag => tag.toLowerCase().includes(searchTerm));
                 const matchesCategory = selectedCategory === 'all' || shortcut.category === selectedCategory;
                 return matchesSearch && matchesCategory;
             });
@@ -273,7 +367,7 @@
          * Cambia la categoría de atajos mostrada y actualiza los botones de categoría.
          * @param {string} category - La categoría a seleccionar.
          */
-        window.selectCategory = function(category) {
+        function selectCategory(category) {
             // Actualizar el valor del selector de categoría para sincronizarlo
             categoryFilter.value = category;
 
@@ -292,7 +386,7 @@
          * @param {string} key - La clave del atajo (su texto).
          * @param {HTMLElement} buttonElement - El elemento del botón de favorito.
          */
-        window.toggleFavorite = function(key, buttonElement) {
+        function toggleFavorite(key, buttonElement) {
             if (favorites[key]) {
                 delete favorites[key];
                 buttonElement.classList.remove('active');
@@ -307,80 +401,11 @@
             localStorage.setItem('favoriteShortcuts', JSON.stringify(favorites));
         }
 
-        /**
-         * Añade un nuevo atajo a Firestore.
-         */
-        window.addShortcut = async function() {
-            const key = newShortcutKey.value.trim();
-            const action = newShortcutAction.value.trim(); // ¡CORREGIDO! Ahora toma el valor del campo de acción
-            const category = newShortcutCategory.value;
+        // Renderizar todos los atajos al cargar la página
+        document.addEventListener('DOMContentLoaded', () => {
+            renderShortcuts(shortcuts);
+        });
+    </script>
+</body>
+</html>
 
-            if (!key || !action) {
-                showModal('Por favor, completa todos los campos.');
-                return;
-            }
-
-            // Asegurar que la base de datos esté inicializada antes de hacer llamadas a Firestore
-            if (!db) {
-                console.error("Firestore DB no está inicializado.");
-                showModal('¡Oops! La base de datos no está lista. Intenta recargar la página.');
-                return;
-            }
-
-            // Normalizar la clave para la verificación de duplicados
-            const normalizedKey = key.toLowerCase();
-
-            try {
-                // Verificar si el atajo ya existe
-                const q = query(collection(db, `artifacts/${appId}/public/data/shortcuts`), where("normalizedKey", "==", normalizedKey));
-                const querySnapshot = await getDocs(q);
-
-                if (!querySnapshot.empty) {
-                    showModal('¡Este atajo ya existe! Intenta con otro. 🤔');
-                    return;
-                }
-
-                // Añadir el nuevo atajo a Firestore
-                await addDoc(collection(db, `artifacts/${appId}/public/data/shortcuts`), {
-                    key: key,
-                    action: action,
-                    category: category,
-                    normalizedKey: normalizedKey, // Guardar la clave normalizada para búsquedas eficientes
-                    addedBy: userId || 'anonymous', // Guardar el ID del usuario que lo añadió
-                    createdAt: new Date().toISOString() // Timestamp de creación
-                });
-
-                hideAddShortcutModal();
-                showModal('¡Atajo agregado con éxito! ✨');
-                addShortcutForm.reset(); // Limpiar el formulario
-            } catch (e) {
-                console.error("Error al añadir el atajo: ", e);
-                showModal('¡Oops! Hubo un error al guardar el atajo. Intenta de nuevo.');
-            }
-        }
-
-        // --- Firebase Initialization and Data Loading ---
-        document.addEventListener('DOMContentLoaded', async () => {
-            try {
-                // Obtener ID de la aplicación y configuración de Firebase
-                appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id'; // Asignar a la variable global
-                const firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : '{}');
-
-                // Inicializar Firebase
-                app = initializeApp(firebaseConfig);
-                auth = getAuth(app);
-                db = getFirestore(app);
-
-                // Autenticar al usuario
-                if (typeof __initial_auth_token !== 'undefined') {
-                    await signInWithCustomToken(auth, __initial_auth_token);
-                } else {
-                    await signInAnonymously(auth);
-                }
-
-                // Establecer el ID de usuario una vez que la autenticación esté lista
-                onAuthStateChanged(auth, (user) => {
-                    if (user) {
-                        userId = user.uid;
-                        userIdDisplay.textContent = `Tu ID de usuario: ${userId}`;
-                        // Cargar ataj

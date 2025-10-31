@@ -3,428 +3,777 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Atajos Pro ⚡️</title>
+    <title>🚀 Atajos Pro - Tu Academia de Shortcuts</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #1a202c; /* Fondo oscuro */
-            color: #e2e8f0; /* Texto claro */
+        * {
+            font-family: 'Poppins', sans-serif;
         }
-        .gradient-bg {
-            background-image: linear-gradient(to right top, #6b46c1, #805ad5, #9f67ea, #bb6bf5, #d66ffc);
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
         .shortcut-card {
-            background-color: #2d3748; /* Color de tarjeta más oscuro */
+            background: linear-gradient(145deg, #2d3748, #1a202c);
             border-radius: 1rem;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-            transition: transform 0.2s ease-in-out;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .shortcut-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2, #f093fb);
         }
         .shortcut-card:hover {
-            transform: translateY(-5px);
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(102, 126, 234, 0.4);
         }
-        .category-button {
-            background-color: #4a5568;
-            color: #e2e8f0;
-            border-radius: 9999px; /* fully rounded */
-            padding: 0.5rem 1.25rem;
-            transition: background-color 0.2s ease-in-out;
-        }
-        .category-button.active, .category-button:hover {
-            background-color: #805ad5; /* Púrpura más brillante */
-        }
-        .search-input {
-            background-color: #4a5568;
-            color: #e2e8f0;
-            border-radius: 0.75rem;
-            padding: 0.75rem 1rem;
-            border: none;
-        }
-        .favorite-btn {
-            color: #a0aec0; /* Gris claro */
-            transition: color 0.2s ease-in-out;
-        }
-        .favorite-btn.active {
-            color: #f6ad55; /* Naranja para favorito */
-        }
-        .modal {
-            background-color: rgba(0, 0, 0, 0.7);
-        }
-        .modal-content {
-            background-color: #2d3748;
+        .level-badge {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            padding: 0.25rem 0.75rem;
             border-radius: 1rem;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
         }
+        .progress-ring {
+            transform: rotate(-90deg);
+        }
+        .category-btn {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+        .category-btn:hover, .category-btn.active {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-color: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+        .stat-card {
+            background: linear-gradient(145deg, #4a5568, #2d3748);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            text-align: center;
+        }
+        .quiz-option {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            padding: 1rem;
+            border-radius: 0.75rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .quiz-option:hover {
+            background: rgba(102, 126, 234, 0.2);
+            border-color: #667eea;
+            transform: translateX(5px);
+        }
+        .quiz-option.correct {
+            background: rgba(16, 185, 129, 0.2);
+            border-color: #10b981;
+        }
+        .quiz-option.incorrect {
+            background: rgba(239, 68, 68, 0.2);
+            border-color: #ef4444;
+        }
+        .modal-overlay {
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+        }
+        .trophy-icon {
+            font-size: 4rem;
+            background: linear-gradient(135deg, #ffd700, #ffed4e);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: bounce 2s infinite;
+        }
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .fade-in {
+            animation: fadeIn 0.5s ease forwards;
+        }
+        .difficulty-easy { border-left: 4px solid #10b981; }
+        .difficulty-medium { border-left: 4px solid #f59e0b; }
+        .difficulty-hard { border-left: 4px solid #ef4444; }
     </style>
 </head>
-<body class="min-h-screen flex flex-col items-center p-4">
+<body class="min-h-screen p-4">
 
-    <!-- Header -->
-    <header class="w-full max-w-4xl text-center mb-8">
-        <h1 class="text-4xl font-extrabold gradient-bg text-transparent bg-clip-text pb-2">Atajos Pro para Futuros Técnicos⚡️</h1>
-        <p class="text-xl text-gray-400 mt-2">¡Dominá Windows con estos trucos épicos!</p>
-    </header>
+    <!-- Header con Stats -->
+    <div class="max-w-7xl mx-auto mb-8">
+        <div class="glass-effect rounded-2xl p-6 mb-6">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+                <div class="text-center md:text-left">
+                    <h1 class="text-4xl md:text-5xl font-extrabold text-white mb-2">
+                        🚀 Atajos Pro
+                    </h1>
+                    <p class="text-xl text-gray-200">Tu Academia de Shortcuts para Informática Aplicada</p>
+                </div>
+                <div class="flex gap-4">
+                    <button id="btnQuiz" class="px-6 py-3 bg-gradient-to-r from-pink-500 to-purple-600 rounded-xl font-bold text-white hover:scale-105 transition-transform">
+                        <i class="fas fa-graduation-cap mr-2"></i>Quiz
+                    </button>
+                    <button id="btnStats" class="px-6 py-3 bg-gradient-to-r from-blue-500 to-cyan-600 rounded-xl font-bold text-white hover:scale-105 transition-transform">
+                        <i class="fas fa-chart-line mr-2"></i>Stats
+                    </button>
+                </div>
+            </div>
+        </div>
 
-    <!-- Search and Filter -->
-    <div class="w-full max-w-3xl mb-8 flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-4">
-        <input type="text" id="searchInput" class="search-input w-full md:flex-1" placeholder="Busca atajos, acciones, etc..." onkeyup="filterShortcuts()">
-        <select id="categoryFilter" class="search-input md:w-auto" onchange="filterShortcuts()">
-            <option value="all">Todas las categorías</option>
-            <option value="general">Generales</option>
-            <option value="windows_logo">Tecla Windows</option>
-            <option value="command_prompt">Símbolo del sistema</option>
-            <option value="dialog_boxes">Cuadros de diálogo</option>
-            <option value="file_explorer">Explorador de archivos</option>
-            <option value="virtual_desktops">Escritorios virtuales</option>
-            <option value="taskbar">Barra de tareas</option>
-            <option value="settings">Configuración</option>
-            <option value="favorites">Favoritos</option> <!-- Nueva opción para favoritos -->
-        </select>
+        <!-- Stats Cards -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+            <div class="stat-card">
+                <div class="text-3xl mb-2">🎯</div>
+                <div class="text-2xl font-bold text-white" id="totalLearned">0</div>
+                <div class="text-sm text-gray-400">Aprendidos</div>
+            </div>
+            <div class="stat-card">
+                <div class="text-3xl mb-2">⭐</div>
+                <div class="text-2xl font-bold text-yellow-400" id="totalFavorites">0</div>
+                <div class="text-sm text-gray-400">Favoritos</div>
+            </div>
+            <div class="stat-card">
+                <div class="text-3xl mb-2">🔥</div>
+                <div class="text-2xl font-bold text-orange-400" id="streakDays">0</div>
+                <div class="text-sm text-gray-400">Días Racha</div>
+            </div>
+            <div class="stat-card">
+                <div class="text-3xl mb-2">🏆</div>
+                <div class="text-2xl font-bold text-purple-400" id="userLevel">1</div>
+                <div class="text-sm text-gray-400">Nivel</div>
+            </div>
+        </div>
     </div>
 
-    <!-- Shortcut Categories -->
-    <div class="w-full max-w-4xl flex flex-wrap justify-center gap-3 mb-8">
-        <button class="category-button active" data-category="all" onclick="selectCategory('all')">Todo</button>
-        <button class="category-button" data-category="general" onclick="selectCategory('general')">Generales</button>
-        <button class="category-button" data-category="windows_logo" onclick="selectCategory('windows_logo')">Tecla Windows</button>
-        <button class="category-button" data-category="command_prompt" onclick="selectCategory('command_prompt')">Símbolo del sistema</button>
-        <button class="category-button" data-category="dialog_boxes" onclick="selectCategory('dialog_boxes')">Cuadros de diálogo</button>
-        <button class="category-button" data-category="file_explorer" onclick="selectCategory('file_explorer')">Explorador de archivos</button>
-        <button class="category-button" data-category="virtual_desktops" onclick="selectCategory('virtual_desktops')">Escritorios virtuales</button>
-        <button class="category-button" data-category="taskbar" onclick="selectCategory('taskbar')">Barra de tareas</button>
-        <button class="category-button" data-category="settings" onclick="selectCategory('settings')">Configuración</button>
-        <button class="category-button" data-category="favorites" onclick="selectCategory('favorites')">Favoritos</button> <!-- Nuevo botón para favoritos -->
+    <!-- Search y Filtros -->
+    <div class="max-w-7xl mx-auto mb-8">
+        <div class="glass-effect rounded-2xl p-6">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                <input 
+                    type="text" 
+                    id="searchInput" 
+                    class="px-4 py-3 bg-gray-800 text-white rounded-xl border-2 border-gray-700 focus:border-purple-500 outline-none transition-all"
+                    placeholder="🔍 Buscar atajos...">
+                
+                <select 
+                    id="categoryFilter" 
+                    class="px-4 py-3 bg-gray-800 text-white rounded-xl border-2 border-gray-700 focus:border-purple-500 outline-none">
+                    <option value="all">📂 Todas las categorías</option>
+                    <option value="general">🌐 Generales</option>
+                    <option value="windows_logo">🪟 Tecla Windows</option>
+                    <option value="vscode">💻 VS Code</option>
+                    <option value="file_explorer">📁 Explorador</option>
+                    <option value="command_prompt">⚡ CMD</option>
+                    <option value="virtual_desktops">🖥️ Escritorios</option>
+                    <option value="favorites">⭐ Favoritos</option>
+                </select>
+
+                <select 
+                    id="difficultyFilter" 
+                    class="px-4 py-3 bg-gray-800 text-white rounded-xl border-2 border-gray-700 focus:border-purple-500 outline-none">
+                    <option value="all">🎯 Todas las dificultades</option>
+                    <option value="easy">🟢 Básico</option>
+                    <option value="medium">🟡 Intermedio</option>
+                    <option value="hard">🔴 Avanzado</option>
+                </select>
+            </div>
+
+            <!-- Category Buttons -->
+            <div class="flex flex-wrap gap-3 justify-center">
+                <button class="category-btn active px-4 py-2 rounded-xl text-white font-semibold" data-category="all">
+                    Todo
+                </button>
+                <button class="category-btn px-4 py-2 rounded-xl text-white font-semibold" data-category="general">
+                    🌐 Generales
+                </button>
+                <button class="category-btn px-4 py-2 rounded-xl text-white font-semibold" data-category="windows_logo">
+                    🪟 Windows
+                </button>
+                <button class="category-btn px-4 py-2 rounded-xl text-white font-semibold" data-category="vscode">
+                    💻 VS Code
+                </button>
+                <button class="category-btn px-4 py-2 rounded-xl text-white font-semibold" data-category="file_explorer">
+                    📁 Explorador
+                </button>
+                <button class="category-btn px-4 py-2 rounded-xl text-white font-semibold" data-category="favorites">
+                    ⭐ Favoritos
+                </button>
+            </div>
+        </div>
     </div>
 
     <!-- Shortcuts Grid -->
-    <div id="shortcutsGrid" class="w-full max-w-5xl grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <!-- Shortcuts will be loaded here by JavaScript -->
+    <div class="max-w-7xl mx-auto mb-8">
+        <div id="shortcutsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Los shortcuts se cargarán aquí -->
+        </div>
     </div>
 
-    <!-- Message Modal -->
-    <div id="messageModal" class="modal fixed inset-0 flex items-center justify-center hidden">
-        <div class="modal-content p-6 max-w-sm w-full text-center">
-            <p id="modalMessage" class="text-lg font-semibold mb-4"></p>
-            <button class="px-4 py-2 bg-purple-600 rounded-md hover:bg-purple-700" onclick="hideModal()">Entendido</button>
+    <!-- Modal de Quiz -->
+    <div id="quizModal" class="fixed inset-0 modal-overlay hidden items-center justify-center z-50 p-4">
+        <div class="bg-gray-800 rounded-2xl p-8 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-3xl font-bold text-white">🎓 Quiz de Atajos</h2>
+                <button id="btnCloseQuiz" class="text-white text-2xl hover:text-red-400">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div id="quizContent" class="space-y-6">
+                <!-- Contenido del quiz -->
+            </div>
+            
+            <div id="quizResult" class="hidden">
+                <div class="text-center">
+                    <div class="trophy-icon mb-4">
+                        <i class="fas fa-trophy"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white mb-2">¡Quiz Completado!</h3>
+                    <p class="text-xl text-gray-300 mb-6">
+                        Acertaste <span id="quizScore" class="text-green-400 font-bold">0</span> de <span id="quizTotal" class="font-bold">10</span>
+                    </p>
+                    <button id="btnRestartQuiz" class="px-8 py-3 bg-gradient-to-r from-purple-500 to-pink-600 rounded-xl font-bold text-white hover:scale-105 transition-transform">
+                        Reintentar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Stats -->
+    <div id="statsModal" class="fixed inset-0 modal-overlay hidden items-center justify-center z-50 p-4">
+        <div class="bg-gray-800 rounded-2xl p-8 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-3xl font-bold text-white">📊 Tus Estadísticas</h2>
+                <button id="btnCloseStats" class="text-white text-2xl hover:text-red-400">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="space-y-6">
+                <div class="bg-gray-700 rounded-xl p-6">
+                    <h3 class="text-xl font-bold text-white mb-4">🎯 Progreso General</h3>
+                    <div class="space-y-4">
+                        <div>
+                            <div class="flex justify-between text-sm text-gray-300 mb-2">
+                                <span>Atajos Aprendidos</span>
+                                <span id="statsLearned">0/200</span>
+                            </div>
+                            <div class="w-full bg-gray-600 rounded-full h-3">
+                                <div id="statsProgressBar" class="bg-gradient-to-r from-green-400 to-blue-500 h-3 rounded-full" style="width: 0%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="bg-gray-700 rounded-xl p-4 text-center">
+                        <div class="text-4xl mb-2">🏅</div>
+                        <div class="text-2xl font-bold text-white" id="statsTotalPoints">0</div>
+                        <div class="text-sm text-gray-400">Puntos Totales</div>
+                    </div>
+                    <div class="bg-gray-700 rounded-xl p-4 text-center">
+                        <div class="text-4xl mb-2">⚡</div>
+                        <div class="text-2xl font-bold text-yellow-400" id="statsQuizzesTaken">0</div>
+                        <div class="text-sm text-gray-400">Quizzes Realizados</div>
+                    </div>
+                </div>
+
+                <div class="bg-gray-700 rounded-xl p-6">
+                    <h3 class="text-xl font-bold text-white mb-4">🏆 Logros Desbloqueados</h3>
+                    <div class="grid grid-cols-3 gap-3" id="achievementsList">
+                        <!-- Achievements se cargarán aquí -->
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
     <script>
-        // Array de objetos con los atajos de teclado
+        // Base de datos de shortcuts (incluyendo VS Code)
         const shortcuts = [
-            // GENERAL SHORTCUTS
-            { category: "general", key: "Ctrl + X", action: "Cortar el elemento seleccionado.", tags: ["cortar", "seleccionar"] },
-            { category: "general", key: "Ctrl + C (o Ctrl + Insertar)", action: "Copiar el elemento seleccionado.", tags: ["copiar", "seleccionar"] },
-            { category: "general", key: "Ctrl + V (o Mayús + Insertar)", action: "Pegar el elemento seleccionado.", tags: ["pegar", "seleccionar"] },
-            { category: "general", key: "Ctrl + Z", action: "Deshacer una acción.", tags: ["deshacer"] },
-            { category: "general", key: "Alt + Tabulador", action: "Cambiar entre aplicaciones abiertas.", tags: ["cambiar", "aplicaciones"] },
-            { category: "general", key: "Alt + F4", action: "Cerrar el elemento activo o salir de la aplicación activa.", tags: ["cerrar", "aplicación"] },
-            { category: "general", key: "Tecla del logotipo de Windows + L", action: "Bloquear el equipo.", tags: ["bloquear", "equipo"] },
-            { category: "general", key: "Tecla del logotipo de Windows + D", action: "Mostrar y ocultar el escritorio.", tags: ["escritorio", "mostrar", "ocultar"] },
-            { category: "general", key: "F2", action: "Cambiar el nombre del elemento seleccionado.", tags: ["renombrar", "archivo", "carpeta"] },
-            { category: "general", key: "F3", action: "Buscar un archivo o una carpeta en el Explorador de archivos.", tags: ["buscar", "archivo", "carpeta"] },
-            { category: "general", key: "F4", action: "Mostrar la lista de la barra de direcciones en el Explorador de archivos.", tags: ["explorador", "dirección"] },
-            { category: "general", key: "F5", action: "Actualizar la ventana activa.", tags: ["actualizar"] },
-            { category: "general", key: "F6", action: "Desplazarse por los elementos de la pantalla en una ventana o en el escritorio.", tags: ["navegar", "elementos"] },
-            { category: "general", key: "F10", action: "Activar la barra de menús en la aplicación activa.", tags: ["menú", "activar"] },
-            { category: "general", key: "Alt + F8", action: "Mostrar la contraseña en la pantalla de inicio de sesión.", tags: ["contraseña", "iniciar sesión"] },
-            { category: "general", key: "Alt + Esc", action: "Desplazarse por los elementos en el orden en que se abrieron.", tags: ["navegar", "elementos"] },
-            { category: "general", key: "Alt + letra subrayada", action: "Ejecutar el comando correspondiente a esa letra.", tags: ["comando"] },
-            { category: "general", key: "Alt + Entrar", action: "Ver las propiedades del elemento seleccionado.", tags: ["propiedades"] },
-            { category: "general", key: "Alt + Barra espaciadora", action: "Abrir el menú contextual de la ventana activa.", tags: ["menú", "ventana"] },
-            { category: "general", key: "Alt + Flecha izquierda", action: "Volver.", tags: ["volver"] },
-            { category: "general", key: "Alt + Flecha derecha", action: "Ir hacia delante.", tags: ["adelante"] },
-            { category: "general", key: "Alt + Re Pág", action: "Subir una pantalla.", tags: ["desplazar", "arriba"] },
-            { category: "general", key: "Alt + Av Pág", action: "Bajar una pantalla.", tags: ["desplazar", "abajo"] },
-            { category: "general", key: "Ctrl + F4", action: "Cerrar el documento activo (en las aplicaciones que están abiertas a pantalla completa y que te permiten tener abiertos varios documentos simultáneamente).", tags: ["cerrar", "documento"] },
-            { category: "general", key: "Ctrl + A", action: "Seleccionar todos los elementos en un documento o una ventana.", tags: ["seleccionar", "todo"] },
-            { category: "general", key: "Ctrl + D (o Supr)", action: "Eliminar el elemento seleccionado y moverlo a la papelera de reciclaje.", tags: ["eliminar", "papelera"] },
-            { category: "general", key: "Ctrl + R (o F5)", action: "Actualizar la ventana activa.", tags: ["actualizar"] },
-            { category: "general", key: "Ctrl + Y", action: "Rehacer una acción.", tags: ["rehacer"] },
-            { category: "general", key: "Ctrl + Flecha derecha", action: "Mover el cursor al principio de la palabra siguiente.", tags: ["cursor", "palabra"] },
-            { category: "general", key: "Ctrl + Flecha izquierda", action: "Mover el cursor al principio de la palabra anterior.", tags: ["cursor", "palabra"] },
-            { category: "general", key: "Ctrl + Flecha abajo", action: "Mover el cursor al principio del párrafo siguiente.", tags: ["cursor", "párrafo"] },
-            { category: "general", key: "Ctrl + Flecha arriba", action: "Mover el cursor al principio del párrafo anterior.", tags: ["cursor", "párrafo"] },
-            { category: "general", key: "Ctrl + Alt + Tabulador", action: "Usar las teclas de dirección para cambiar entre todas las aplicaciones abiertas.", tags: ["cambiar", "aplicaciones"] },
-            { category: "general", key: "Alt + Mayús + teclas de dirección", action: "Cuando un grupo o un icono tiene el foco en el menú Inicio, moverlo en la dirección especificada.", tags: ["menú inicio", "mover"] },
-            { category: "general", key: "Ctrl + Mayús + teclas de dirección", action: "Cuando una ventana tenga el foco en el menú Inicio, muévelo a otra ventana para crear una carpeta.", tags: ["menú inicio", "carpeta"] },
-            { category: "general", key: "Ctrl + teclas de dirección", action: "Cambiar el tamaño del menú Inicio cuando se abre.", tags: ["menú inicio", "tamaño"] },
-            { category: "general", key: "Ctrl + tecla de dirección (para desplazarse a un elemento) + Barra espaciadora", action: "Seleccionar varios elementos individuales en una ventana o en el escritorio.", tags: ["seleccionar", "varios"] },
-            { category: "general", key: "Ctrl + Mayús con una tecla de dirección", action: "Seleccionar un bloque de texto.", tags: ["seleccionar", "texto"] },
-            { category: "general", key: "Ctrl + Esc", action: "Abrir Inicio.", tags: ["inicio", "abrir"] },
-            { category: "general", key: "Ctrl + Mayús + Esc", action: "Abrir el Administrador de tareas.", tags: ["administrador de tareas", "abrir"] },
-            { category: "general", key: "Ctrl + Mayús", action: "Cambiar la distribución del teclado cuando hay varias distribuciones del teclado disponibles.", tags: ["teclado", "idioma"] },
-            { category: "general", key: "Ctrl + Barra espaciadora", action: "Activar o desactivar el Editor de métodos de entrada (IME) para chino.", tags: ["IME", "chino"] },
-            { category: "general", key: "Mayús + F10", action: "Mostrar el menú contextual del elemento seleccionado.", tags: ["menú contextual"] },
-            { category: "general", key: "Mayús con una tecla de dirección", action: "Seleccionar varios elementos en una ventana o en el escritorio, o bien seleccionar texto en un documento.", tags: ["seleccionar", "varios", "texto"] },
-            { category: "general", key: "Mayús + Supr", action: "Eliminar el elemento seleccionado sin moverlo a la papelera de reciclaje.", tags: ["eliminar", "permanente"] },
-            { category: "general", key: "Flecha derecha", action: "Abrir el siguiente menú de la derecha o abrir un submenú.", tags: ["menú", "submenú"] },
-            { category: "general", key: "Flecha izquierda", action: "Abrir el siguiente menú de la izquierda o cerrar un submenú.", tags: ["menú", "submenú"] },
-            { category: "general", key: "Esc", action: "Detener la tarea actual o salir de ella.", tags: ["detener", "salir"] },
-            { category: "general", key: "Impr Pant", action: "Tomar una captura de pantalla de la pantalla completa y copiarla en el Portapapeles.", tags: ["captura de pantalla", "portapapeles"] },
+            // ===== GENERAL SHORTCUTS =====
+            { category: "general", difficulty: "easy", key: "Ctrl + C", action: "Copiar el elemento seleccionado", tags: ["copiar"], icon: "📋" },
+            { category: "general", difficulty: "easy", key: "Ctrl + V", action: "Pegar el elemento seleccionado", tags: ["pegar"], icon: "📝" },
+            { category: "general", difficulty: "easy", key: "Ctrl + X", action: "Cortar el elemento seleccionado", tags: ["cortar"], icon: "✂️" },
+            { category: "general", difficulty: "easy", key: "Ctrl + Z", action: "Deshacer una acción", tags: ["deshacer"], icon: "↩️" },
+            { category: "general", difficulty: "easy", key: "Ctrl + Y", action: "Rehacer una acción", tags: ["rehacer"], icon: "↪️" },
+            { category: "general", difficulty: "easy", key: "Ctrl + A", action: "Seleccionar todo", tags: ["seleccionar"], icon: "🔷" },
+            { category: "general", difficulty: "easy", key: "Ctrl + S", action: "Guardar archivo", tags: ["guardar"], icon: "💾" },
+            { category: "general", difficulty: "easy", key: "Alt + Tab", action: "Cambiar entre aplicaciones abiertas", tags: ["cambiar"], icon: "🔄" },
+            { category: "general", difficulty: "easy", key: "Alt + F4", action: "Cerrar la aplicación activa", tags: ["cerrar"], icon: "❌" },
+            { category: "general", difficulty: "easy", key: "F2", action: "Renombrar archivo o carpeta", tags: ["renombrar"], icon: "✏️" },
+            { category: "general", difficulty: "medium", key: "Ctrl + Shift + Esc", action: "Abrir el Administrador de tareas", tags: ["tareas"], icon: "📊" },
+            { category: "general", difficulty: "medium", key: "Ctrl + F", action: "Buscar en documento", tags: ["buscar"], icon: "🔍" },
+            { category: "general", difficulty: "medium", key: "F5", action: "Actualizar ventana activa", tags: ["actualizar"], icon: "🔄" },
+            { category: "general", difficulty: "hard", key: "Ctrl + Shift + N", action: "Crear carpeta nueva", tags: ["carpeta"], icon: "📁" },
 
-            // WINDOWS LOGO KEY SHORTCUTS
-            { category: "windows_logo", key: "Tecla del logotipo de Windows", action: "Abrir o cerrar Inicio.", tags: ["inicio", "abrir", "cerrar"] },
-            { category: "windows_logo", key: "Tecla del logotipo de Windows + A", action: "Abrir el Centro de actividades.", tags: ["centro de actividades"] },
-            { category: "windows_logo", key: "Tecla del logotipo de Windows + B", action: "Llevar el foco al área de notificación.", tags: ["notificación", "foco"] },
-            { category: "windows_logo", key: "Tecla del logotipo de Windows + C", action: "Abrir Cortana en modo de escucha.", tags: ["cortana", "voz"] },
-            { category: "windows_logo", key: "Tecla del logotipo de Windows + Mayús + C", action: "Abrir el menú de botones de acceso.", tags: ["acceso", "menú"] },
-            { category: "windows_logo", key: "Tecla del logotipo de Windows + D", action: "Mostrar y ocultar el escritorio.", tags: ["escritorio", "mostrar", "ocultar"] },
-            { category: "windows_logo", key: "Tecla del logotipo de Windows + Alt + D", action: "Mostrar y ocultar la fecha y hora en el escritorio.", tags: ["fecha", "hora", "escritorio"] },
-            { category: "windows_logo", key: "Tecla del logotipo de Windows + E", action: "Abrir el Explorador de archivos.", tags: ["explorador de archivos", "abrir"] },
-            { category: "windows_logo", key: "Tecla del logotipo de Windows + F", action: "Abrir el Centro de opiniones y hacer una captura de pantalla.", tags: ["opiniones", "captura de pantalla"] },
-            { category: "windows_logo", key: "Tecla del logotipo de Windows + G", action: "Abrir la barra de juegos con un juego abierto.", tags: ["barra de juegos", "juegos"] },
-            { category: "windows_logo", key: "Tecla del logotipo de Windows + H", action: "Iniciar dictado.", tags: ["dictado", "voz"] },
-            { category: "windows_logo", key: "Tecla del logotipo de Windows + I", action: "Abrir Configuración.", tags: ["configuración", "abrir"] },
-            { category: "windows_logo", key: "Tecla del logotipo de Windows + J", action: "Establecer el foco en una sugerencia de Windows cuando haya una disponible.", tags: ["sugerencia", "foco"] },
-            { category: "windows_logo", key: "Tecla del logotipo de Windows + K", action: "Abrir la acción rápida Conectar.", tags: ["conectar", "acción rápida"] },
-            { category: "windows_logo", key: "Tecla del logotipo de Windows + L", action: "Bloquear el equipo o cambiar de cuenta.", tags: ["bloquear", "cuenta"] },
-            { category: "windows_logo", key: "Tecla del logotipo de Windows + M", action: "Minimizar todas las ventanas.", tags: ["minimizar", "ventanas"] },
-            { category: "windows_logo", key: "Tecla del logotipo de Windows + O", action: "Bloquear la orientación del dispositivo.", tags: ["orientación", "dispositivo"] },
-            { category: "windows_logo", key: "Tecla del logotipo de Windows + P", action: "Elegir un modo de presentación.", tags: ["presentación"] },
-            { category: "windows_logo", key: "Tecla del logotipo de Windows + Ctrl + Q", action: "Abrir Asistencia rápida.", tags: ["asistencia", "ayuda"] },
-            { category: "windows_logo", key: "Tecla del logotipo de Windows + R", action: "Abrir el cuadro de diálogo Ejecutar", tags: ["ejecutar", "cuadro de diálogo"] },
-            { category: "windows_logo", key: "Tecla del logotipo de Windows + S", action: "Abrir la búsqueda.", tags: ["buscar", "abrir"] },
-            { category: "windows_logo", key: "Tecla del logotipo de Windows + Mayús + S", action: "Realizar una captura de pantalla de parte de la pantalla.", tags: ["captura de pantalla", "recorte"] },
-            { category: "windows_logo", key: "Tecla del logotipo de Windows + T", action: "Desplazarse por las aplicaciones de la barra de tareas.", tags: ["barra de tareas", "navegar"] },
-            { category: "windows_logo", key: "Tecla del logotipo de Windows + U", action: "Abrir el Centro de accesibilidad.", tags: ["accesibilidad", "centro"] },
-            { category: "windows_logo", key: "Tecla del logotipo de Windows + V", action: "Abrir el Portapapeles.", tags: ["portapapeles", "historial"] },
-            { category: "windows_logo", key: "Tecla del logotipo de Windows + Mayús + V", action: "Desplazarse por las notificaciones.", tags: ["notificaciones"] },
-            { category: "windows_logo", key: "Tecla del logotipo de Windows + X", action: "Abrir el menú Vínculo rápido.", tags: ["menú rápido", "acceso"] },
-            { category: "windows_logo", key: "Tecla del logotipo de Windows + Y", action: "Cambiar entrada entre Windows Mixed Reality y el escritorio.", tags: ["realidad mixta", "escritorio"] },
-            { category: "windows_logo", key: "Tecla del logotipo de Windows + Z", action: "Mostrar los comandos disponibles en una aplicación en modo de pantalla completa.", tags: ["pantalla completa", "comandos"] },
-            { category: "windows_logo", key: "Tecla del logotipo de Windows + punto (.) o punto y coma (;)", action: "Abrir el panel de emojis.", tags: ["emoji", "panel"] },
-            { category: "windows_logo", key: "Tecla del logotipo de Windows + coma (,)", action: "Ojear temporalmente el escritorio.", tags: ["escritorio", "vista previa"] },
-            { category: "windows_logo", key: "Tecla del logotipo de Windows + Pausa", action: "Mostrar el cuadro de diálogo Propiedades del sistema", tags: ["propiedades del sistema"] },
-            { category: "windows_logo", key: "Tecla del logotipo de Windows + Ctrl + F", action: "Buscar equipos (en una red).", tags: ["buscar", "red"] },
-            { category: "windows_logo", key: "Tecla del logotipo de Windows + Mayús + M", action: "Restaurar las ventanas minimizadas en el escritorio.", tags: ["restaurar", "ventanas"] },
-            { category: "windows_logo", key: "Tecla del logotipo de Windows + número", action: "Abrir el escritorio e iniciar la aplicación anclada a la barra de tareas en la posición indicada por el número. Si la aplicación ya se está ejecutando, cambiar a esa aplicación.", tags: ["barra de tareas", "abrir", "aplicación"] },
-            { category: "windows_logo", key: "Tecla del logotipo de Windows + Mayús + número", action: "Abrir el escritorio e iniciar una nueva instancia de la aplicación anclada a la barra de tareas en la posición indicada por el número.", tags: ["barra de tareas", "nueva instancia"] },
-            { category: "windows_logo", key: "Tecla del logotipo de Windows + Ctrl + número", action: "Abrir el escritorio y cambiar a la última ventana activa de la aplicación anclada a la barra de tareas en la posición indicada por el número.", tags: ["barra de tareas", "cambiar ventana"] },
-            { category: "windows_logo", key: "Tecla del logotipo de Windows + Alt + número", action: "Abrir el escritorio y abrir la lista de accesos directos de la aplicación anclada a la barra de tareas en la posición indicada por el número.", tags: ["barra de tareas", "lista de accesos"] },
-            { category: "windows_logo", key: "Tecla del logotipo de Windows + Ctrl + Mayús + número", action: "Abrir el escritorio y abrir una nueva instancia de la aplicación ubicada en la posición determinada en la barra de tareas como administrador.", tags: ["barra de tareas", "administrador"] },
-            { category: "windows_logo", key: "Tecla del logotipo de Windows + Tabulador", action: "Abrir la Vista de tareas.", tags: ["vista de tareas"] },
-            { category: "windows_logo", key: "Tecla del logotipo de Windows + Flecha arriba", action: "Maximizar la ventana.", tags: ["maximizar"] },
-            { category: "windows_logo", key: "Tecla del logotipo de Windows + Flecha abajo", action: "Quitar la aplicación actual de la pantalla o minimizar la ventana del escritorio.", tags: ["minimizar", "quitar"] },
-            { category: "windows_logo", key: "Tecla del logotipo de Windows + Flecha izquierda", action: "Maximizar la ventana de la aplicación o del escritorio en el lado izquierdo de la pantalla.", tags: ["maximizar", "izquierda"] },
-            { category: "windows_logo", key: "Tecla del logotipo de Windows + Flecha derecha", action: "Maximizar la ventana de la aplicación o del escritorio en el lado derecho de la pantalla.", tags: ["maximizar", "derecha"] },
-            { category: "windows_logo", key: "Tecla del logotipo de Windows + Inicio", action: "Minimizar todo excepto la ventana del escritorio activa (repetir la acción para restaurar todas las ventanas).", tags: ["minimizar", "restaurar"] },
-            { category: "windows_logo", key: "Tecla del logotipo de Windows + Mayús + Flecha arriba", action: "Expandir la ventana del escritorio a la parte superior e inferior de la pantalla.", tags: ["expandir"] },
-            { category: "windows_logo", key: "Tecla del logotipo de Windows + Mayús + Flecha abajo", action: "Restaurar/minimizar las ventanas del escritorio activas verticalmente conservando el ancho.", tags: ["restaurar", "minimizar"] },
-            { category: "windows_logo", key: "Tecla del logotipo de Windows + Mayús + Flecha izquierda o derecha", action: "Mover una aplicación o ventana del escritorio de un monitor a otro.", tags: ["monitor", "mover"] },
-            { category: "windows_logo", key: "Tecla del logotipo de Windows + Barra espaciadora", action: "Cambiar entre el idioma de entrada y la distribución del teclado.", tags: ["idioma", "teclado"] },
-            { category: "windows_logo", key: "Tecla del logotipo de Windows + Ctrl + Barra espaciadora", action: "Cambiar a una entrada seleccionada anteriormente.", tags: ["idioma", "teclado"] },
-            { category: "windows_logo", key: "Tecla del logotipo de Windows + Ctrl + Entrar", action: "Activar Narrador.", tags: ["narrador", "accesibilidad"] },
-            { category: "windows_logo", key: "Tecla del logotipo de Windows + Más (+)", action: "Abrir la Lupa.", tags: ["lupa", "accesibilidad"] },
-            { category: "windows_logo", key: "Tecla del logotipo de Windows + barra diagonal (/)", action: "Comienza la reconversión de IME.", tags: ["IME"] },
-            { category: "windows_logo", key: "Tecla del logotipo de Windows + Ctrl + V", action: "Abrir notificaciones animadas.", tags: ["notificaciones"] },
-            { category: "windows_logo", key: "Tecla del logotipo de Windows + Ctrl + Mayús + B", action: "Activar el PC desde una pantalla negra o en blanco", tags: ["pantalla", "activar"] },
+            // ===== WINDOWS LOGO SHORTCUTS =====
+            { category: "windows_logo", difficulty: "easy", key: "Win + D", action: "Mostrar/ocultar escritorio", tags: ["escritorio"], icon: "🖥️" },
+            { category: "windows_logo", difficulty: "easy", key: "Win + E", action: "Abrir Explorador de archivos", tags: ["explorador"], icon: "📁" },
+            { category: "windows_logo", difficulty: "easy", key: "Win + L", action: "Bloquear el equipo", tags: ["bloquear"], icon: "🔒" },
+            { category: "windows_logo", difficulty: "easy", key: "Win + I", action: "Abrir Configuración", tags: ["configuración"], icon: "⚙️" },
+            { category: "windows_logo", difficulty: "medium", key: "Win + Tab", action: "Abrir Vista de tareas", tags: ["tareas"], icon: "🔲" },
+            { category: "windows_logo", difficulty: "medium", key: "Win + S", action: "Abrir búsqueda", tags: ["buscar"], icon: "🔍" },
+            { category: "windows_logo", difficulty: "medium", key: "Win + V", action: "Abrir historial del portapapeles", tags: ["portapapeles"], icon: "📋" },
+            { category: "windows_logo", difficulty: "medium", key: "Win + . (punto)", action: "Abrir panel de emojis", tags: ["emoji"], icon: "😀" },
+            { category: "windows_logo", difficulty: "medium", key: "Win + Shift + S", action: "Captura de pantalla (recorte)", tags: ["captura"], icon: "📸" },
+            { category: "windows_logo", difficulty: "hard", key: "Win + Ctrl + D", action: "Crear nuevo escritorio virtual", tags: ["escritorio"], icon: "➕" },
+            { category: "windows_logo", difficulty: "hard", key: "Win + Ctrl + F4", action: "Cerrar escritorio virtual actual", tags: ["cerrar"], icon: "❌" },
+            { category: "windows_logo", difficulty: "hard", key: "Win + Ctrl + ←/→", action: "Cambiar entre escritorios virtuales", tags: ["escritorio"], icon: "↔️" },
 
-            // COMMAND PROMPT SHORTCUTS
-            { category: "command_prompt", key: "Ctrl + C (o Ctrl + Insertar)", action: "Copiar el texto seleccionado.", tags: ["copiar", "símbolo del sistema"] },
-            { category: "command_prompt", key: "Ctrl + V (o Mayús + Insertar)", action: "Pegar el texto seleccionado.", tags: ["pegar", "símbolo del sistema"] },
-            { category: "command_prompt", key: "Ctrl + M", action: "Acceder al modo de marca.", tags: ["modo de marca", "símbolo del sistema"] },
-            { category: "command_prompt", key: "Alt + tecla de selección", action: "Iniciar la selección en modo de bloque.", tags: ["selección", "símbolo del sistema"] },
-            { category: "command_prompt", key: "Teclas de dirección", action: "Mover el cursor en la dirección especificada.", tags: ["cursor", "símbolo del sistema"] },
-            { category: "command_prompt", key: "Re Pág", action: "Subir el cursor una página.", tags: ["desplazar", "símbolo del sistema"] },
-            { category: "command_prompt", key: "Av Pág", action: "Bajar el cursor una página.", tags: ["desplazar", "símbolo del sistema"] },
-            { category: "command_prompt", key: "Ctrl + Inicio (modo de marca)", action: "Mover el cursor al principio del búfer.", tags: ["cursor", "símbolo del sistema"] },
-            { category: "command_prompt", key: "Ctrl + Fin (modo de marca)", action: "Mover el cursor al final del búfer.", tags: ["cursor", "símbolo del sistema"] },
-            { category: "command_prompt", key: "Ctrl + Flecha arriba", action: "Subir una línea en el historial de salida.", tags: ["historial", "símbolo del sistema"] },
-            { category: "command_prompt", key: "Ctrl + Flecha abajo", action: "Bajar una línea en el historial de salida.", tags: ["historial", "símbolo del sistema"] },
-            { category: "command_prompt", key: "Ctrl + Inicio (navegación por el historial)", action: "Si la línea de comandos está vacía, mueve la ventanilla a la parte superior del búfer. De lo contrario, elimina todos los caracteres a la izquierda del cursor en la línea de comandos.", tags: ["historial", "símbolo del sistema"] },
-            { category: "command_prompt", key: "Ctrl + Fin (navegación por el historial)", action: "Si la línea de comandos está vacía, mueve la ventanilla a la línea de comandos. De lo contrario, elimina todos los caracteres que se encuentran a la derecha del cursor en la línea de comandos.", tags: ["historial", "símbolo del sistema"] },
+            // ===== VS CODE SHORTCUTS =====
+            // Básicos
+            { category: "vscode", difficulty: "easy", key: "Ctrl + P", action: "Ir rápido a archivo (Quick Open)", tags: ["archivo", "navegar"], icon: "🚀" },
+            { category: "vscode", difficulty: "easy", key: "Ctrl + Shift + P", action: "Abrir paleta de comandos", tags: ["comando"], icon: "🎨" },
+            { category: "vscode", difficulty: "easy", key: "Ctrl + S", action: "Guardar archivo", tags: ["guardar"], icon: "💾" },
+            { category: "vscode", difficulty: "easy", key: "Ctrl + N", action: "Nuevo archivo", tags: ["nuevo"], icon: "📄" },
+            { category: "vscode", difficulty: "easy", key: "Ctrl + W", action: "Cerrar editor actual", tags: ["cerrar"], icon: "❌" },
+            { category: "vscode", difficulty: "easy", key: "Ctrl + Tab", action: "Cambiar entre archivos abiertos", tags: ["cambiar"], icon: "🔄" },
+            { category: "vscode", difficulty: "easy", key: "Ctrl + B", action: "Mostrar/ocultar barra lateral", tags: ["sidebar"], icon: "📂" },
+            { category: "vscode", difficulty: "easy", key: "Ctrl + `", action: "Abrir/cerrar terminal integrada", tags: ["terminal"], icon: "⚡" },
+            
+            // Edición Básica
+            { category: "vscode", difficulty: "easy", key: "Ctrl + /", action: "Comentar/descomentar línea", tags: ["comentar"], icon: "💬" },
+            { category: "vscode", difficulty: "easy", key: "Ctrl + X", action: "Cortar línea (sin seleccionar)", tags: ["cortar"], icon: "✂️" },
+            { category: "vscode", difficulty: "easy", key: "Ctrl + C", action: "Copiar línea (sin seleccionar)", tags: ["copiar"], icon: "📋" },
+            { category: "vscode", difficulty: "easy", key: "Ctrl + Z", action: "Deshacer", tags: ["deshacer"], icon: "↩️" },
+            { category: "vscode", difficulty: "easy", key: "Ctrl + Y", action: "Rehacer", tags: ["rehacer"], icon: "↪️" },
+            
+            // Edición Intermedia
+            { category: "vscode", difficulty: "medium", key: "Alt + ↑/↓", action: "Mover línea arriba/abajo", tags: ["mover"], icon: "↕️" },
+            { category: "vscode", difficulty: "medium", key: "Shift + Alt + ↑/↓", action: "Duplicar línea arriba/abajo", tags: ["duplicar"], icon: "📑" },
+            { category: "vscode", difficulty: "medium", key: "Ctrl + D", action: "Seleccionar siguiente coincidencia", tags: ["seleccionar"], icon: "🎯" },
+            { category: "vscode", difficulty: "medium", key: "Ctrl + Shift + K", action: "Eliminar línea", tags: ["eliminar"], icon: "🗑️" },
+            { category: "vscode", difficulty: "medium", key: "Ctrl + ]", action: "Indentar línea", tags: ["indent"], icon: "➡️" },
+            { category: "vscode", difficulty: "medium", key: "Ctrl + [", action: "Reducir indentación", tags: ["indent"], icon: "⬅️" },
+            { category: "vscode", difficulty: "medium", key: "Ctrl + Enter", action: "Insertar línea debajo", tags: ["nueva línea"], icon: "⬇️" },
+            { category: "vscode", difficulty: "medium", key: "Ctrl + Shift + Enter", action: "Insertar línea arriba", tags: ["nueva línea"], icon: "⬆️" },
+            { category: "vscode", difficulty: "medium", key: "Ctrl + Shift + \\", action: "Ir a llave coincidente", tags: ["navegar"], icon: "🔍" },
+            
+            // Búsqueda y Navegación
+            { category: "vscode", difficulty: "medium", key: "Ctrl + F", action: "Buscar en archivo", tags: ["buscar"], icon: "🔍" },
+            { category: "vscode", difficulty: "medium", key: "Ctrl + H", action: "Reemplazar en archivo", tags: ["reemplazar"], icon: "🔄" },
+            { category: "vscode", difficulty: "medium", key: "Ctrl + Shift + F", action: "Buscar en todos los archivos", tags: ["buscar"], icon: "🔎" },
+            { category: "vscode", difficulty: "medium", key: "Ctrl + G", action: "Ir a línea", tags: ["navegar"], icon: "🎯" },
+            { category: "vscode", difficulty: "medium", key: "Ctrl + Shift + O", action: "Ir a símbolo en archivo", tags: ["símbolo"], icon: "🏷️" },
+            { category: "vscode", difficulty: "medium", key: "Ctrl + T", action: "Ir a símbolo en workspace", tags: ["símbolo"], icon: "🌐" },
+            
+            // Multi-cursor y Selección Avanzada
+            { category: "vscode", difficulty: "hard", key: "Alt + Click", action: "Agregar cursor", tags: ["cursor"], icon: "🖱️" },
+            { category: "vscode", difficulty: "hard", key: "Ctrl + Alt + ↑/↓", action: "Agregar cursor arriba/abajo", tags: ["cursor"], icon: "📍" },
+            { category: "vscode", difficulty: "hard", key: "Ctrl + Shift + L", action: "Seleccionar todas las coincidencias", tags: ["seleccionar"], icon: "🎯" },
+            { category: "vscode", difficulty: "hard", key: "Ctrl + U", action: "Deshacer último cursor", tags: ["cursor"], icon: "↩️" },
+            { category: "vscode", difficulty: "hard", key: "Shift + Alt + I", action: "Insertar cursor al final de cada línea", tags: ["cursor"], icon: "📝" },
+            
+            // Formateo y Refactoring
+            { category: "vscode", difficulty: "medium", key: "Shift + Alt + F", action: "Formatear documento", tags: ["formato"], icon: "✨" },
+            { category: "vscode", difficulty: "medium", key: "Ctrl + K Ctrl + F", action: "Formatear selección", tags: ["formato"], icon: "🎨" },
+            { category: "vscode", difficulty: "hard", key: "F2", action: "Renombrar símbolo", tags: ["refactor"], icon: "✏️" },
+            { category: "vscode", difficulty: "hard", key: "Ctrl + .", action: "Quick Fix (acciones rápidas)", tags: ["fix"], icon: "🔧" },
+            
+            // Debug
+            { category: "vscode", difficulty: "medium", key: "F5", action: "Iniciar/continuar debug", tags: ["debug"], icon: "🐛" },
+            { category: "vscode", difficulty: "medium", key: "F9", action: "Toggle breakpoint", tags: ["debug"], icon: "🔴" },
+            { category: "vscode", difficulty: "medium", key: "F10", action: "Step over (debug)", tags: ["debug"], icon: "⏭️" },
+            { category: "vscode", difficulty: "medium", key: "F11", action: "Step into (debug)", tags: ["debug"], icon: "⬇️" },
+            { category: "vscode", difficulty: "medium", key: "Shift + F11", action: "Step out (debug)", tags: ["debug"], icon: "⬆️" },
+            
+            // Vista y Layouts
+            { category: "vscode", difficulty: "medium", key: "Ctrl + \\", action: "Dividir editor", tags: ["split"], icon: "⬌" },
+            { category: "vscode", difficulty: "medium", key: "Ctrl + 1/2/3", action: "Enfocar grupo de editor", tags: ["focus"], icon: "🎯" },
+            { category: "vscode", difficulty: "hard", key: "Ctrl + K Z", action: "Modo Zen", tags: ["zen"], icon: "🧘" },
+            { category: "vscode", difficulty: "hard", key: "Ctrl + K V", action: "Abrir preview de Markdown", tags: ["markdown"], icon: "📄" },
+            
+            // Git
+            { category: "vscode", difficulty: "medium", key: "Ctrl + Shift + G", action: "Abrir control de Git", tags: ["git"], icon: "🌿" },
+            { category: "vscode", difficulty: "hard", key: "Ctrl + K Ctrl + C", action: "Agregar comentario de línea", tags: ["git"], icon: "💬" },
 
-            // DIALOG BOXES SHORTCUTS
-            { category: "dialog_boxes", key: "F4", action: "Mostrar los elementos de la lista activa.", tags: ["lista", "cuadro de diálogo"] },
-            { category: "dialog_boxes", key: "Ctrl + Tabulador", action: "Avanzar a través de las pestañas.", tags: ["pestañas", "cuadro de diálogo"] },
-            { category: "dialog_boxes", key: "Ctrl + Mayús + Tabulador", action: "Retroceder a través de las pestañas.", tags: ["pestañas", "cuadro de diálogo"] },
-            { category: "dialog_boxes", key: "Ctrl + número (número 1-9)", action: "Desplazarse a la enésima pestaña.", tags: ["pestañas", "cuadro de diálogo"] },
-            { category: "dialog_boxes", key: "Tabulador", action: "Avanzar a través de las opciones.", tags: ["opciones", "cuadro de diálogo"] },
-            { category: "dialog_boxes", key: "Mayús + Tabulador", action: "Retroceder a través de las opciones.", tags: ["opciones", "cuadro de diálogo"] },
-            { category: "dialog_boxes", key: "Alt + letra subrayada", action: "Ejecutar el comando (o seleccionar la opción) que se usa con la letra.", tags: ["comando", "cuadro de diálogo"] },
-            { category: "dialog_boxes", key: "Barra espaciadora", action: "Si la opción activa es una casilla, activarla o desactivarla.", tags: ["casilla", "cuadro de diálogo"] },
-            { category: "dialog_boxes", key: "Retroceso", action: "Abrir una carpeta de un nivel superior si hay una carpeta seleccionada en el cuadro de diálogo Guardar como o Abrir.", tags: ["carpeta", "guardar", "abrir"] },
-            { category: "dialog_boxes", key: "Teclas de dirección", action: "Si la opción activa es un grupo de botones de opción, seleccionar un botón.", tags: ["radio button", "cuadro de diálogo"] },
+            // ===== FILE EXPLORER =====
+            { category: "file_explorer", difficulty: "easy", key: "Ctrl + N", action: "Abrir nueva ventana del explorador", tags: ["ventana"], icon: "🪟" },
+            { category: "file_explorer", difficulty: "easy", key: "Ctrl + W", action: "Cerrar ventana actual", tags: ["cerrar"], icon: "❌" },
+            { category: "file_explorer", difficulty: "medium", key: "Alt + ←", action: "Ir a carpeta anterior", tags: ["navegar"], icon: "⬅️" },
+            { category: "file_explorer", difficulty: "medium", key: "Alt + →", action: "Ir a carpeta siguiente", tags: ["navegar"], icon: "➡️" },
+            { category: "file_explorer", difficulty: "medium", key: "Alt + ↑", action: "Ir a carpeta superior", tags: ["navegar"], icon: "⬆️" },
 
-            // FILE EXPLORER SHORTCUTS
-            { category: "file_explorer", key: "Alt + D", action: "Seleccionar la barra de direcciones.", tags: ["dirección", "explorador"] },
-            { category: "file_explorer", key: "Ctrl + E", action: "Seleccionar el cuadro de búsqueda.", tags: ["buscar", "explorador"] },
-            { category: "file_explorer", key: "Ctrl + F", action: "Seleccionar el cuadro de búsqueda.", tags: ["buscar", "explorador"] },
-            { category: "file_explorer", key: "Ctrl + N", action: "Abrir una ventana nueva.", tags: ["ventana", "explorador"] },
-            { category: "file_explorer", key: "Ctrl + W", action: "Cierre la ventana activa.", tags: ["cerrar", "ventana", "explorador"] },
-            { category: "file_explorer", key: "Ctrl + rueda del ratón", action: "Cambiar el tamaño y la apariencia de los iconos de archivos y carpetas.", tags: ["iconos", "tamaño", "explorador"] },
-            { category: "file_explorer", key: "Ctrl + Mayús + E", action: "Mostrar todas las carpetas situadas sobre la carpeta seleccionada.", tags: ["carpetas", "explorador"] },
-            { category: "file_explorer", key: "Ctrl + Mayús + N", action: "Crear una carpeta nueva.", tags: ["nueva carpeta", "explorador"] },
-            { category: "file_explorer", key: "Bloq Num + asterisco (*)", action: "Mostrar todas las subcarpetas de la carpeta seleccionada.", tags: ["subcarpetas", "explorador"] },
-            { category: "file_explorer", key: "Bloq Num + signo más (+)", action: "Mostrar el contenido de la carpeta seleccionada.", tags: ["contenido", "explorador"] },
-            { category: "file_explorer", key: "Bloq Num + signo menos (-)", action: "Contraer la carpeta seleccionada.", tags: ["contraer", "explorador"] },
-            { category: "file_explorer", key: "Alt + P", action: "Mostrar el panel de vista previa.", tags: ["vista previa", "explorador"] },
-            { category: "file_explorer", key: "Alt + Entrar", action: "Abrir el cuadro de diálogo Propiedades del elemento seleccionado.", tags: ["propiedades", "explorador"] },
-            { category: "file_explorer", key: "Alt + Flecha derecha", action: "Ver la carpeta siguiente.", tags: ["navegar", "explorador"] },
-            { category: "file_explorer", key: "Alt + Flecha arriba", action: "Ver la carpeta que contenía la carpeta.", tags: ["navegar", "explorador"] },
-            { category: "file_explorer", key: "Alt + Flecha izquierda", action: "Ver la carpeta anterior.", tags: ["navegar", "explorador"] },
-            { category: "file_explorer", key: "Retroceso", action: "Ver la carpeta anterior.", tags: ["navegar", "explorador"] },
-            { category: "file_explorer", key: "Flecha derecha", action: "Mostrar la selección actual si está contraída o seleccionar la primera subcarpeta.", tags: ["navegar", "explorador"] },
-            { category: "file_explorer", key: "Flecha izquierda", action: "Contraer la selección actual si está expandida o seleccionar la carpeta que contenía la carpeta.", tags: ["navegar", "explorador"] },
-            { category: "file_explorer", key: "Fin", action: "Mostrar la parte inferior de la ventana activa.", tags: ["desplazar", "explorador"] },
-            { category: "file_explorer", key: "Inicio", action: "Mostrar la parte superior de la ventana activa.", tags: ["desplazar", "explorador"] },
-            { category: "file_explorer", key: "F11", action: "Maximizar o minimizar la ventana activa.", tags: ["maximizar", "minimizar", "explorador"] },
+            // ===== COMMAND PROMPT =====
+            { category: "command_prompt", difficulty: "medium", key: "Ctrl + C", action: "Copiar texto en CMD", tags: ["copiar"], icon: "📋" },
+            { category: "command_prompt", difficulty: "medium", key: "Ctrl + V", action: "Pegar texto en CMD", tags: ["pegar"], icon: "📝" },
+            { category: "command_prompt", difficulty: "hard", key: "Ctrl + M", action: "Modo de marca", tags: ["marca"], icon: "🖱️" },
 
-            // VIRTUAL DESKTOPS SHORTCUTS
-            { category: "virtual_desktops", key: "Tecla del logotipo de Windows + Tabulador", action: "Abrir la Vista de tareas.", tags: ["vista de tareas", "escritorios virtuales"] },
-            { category: "virtual_desktops", key: "Tecla del logotipo de Windows + Ctrl + D", action: "Agregar un escritorio virtual.", tags: ["nuevo escritorio", "escritorios virtuales"] },
-            { category: "virtual_desktops", key: "Tecla del logotipo de Windows + Ctrl + Flecha derecha", action: "Alternar entre los escritorios virtuales que has creado a la derecha.", tags: ["cambiar escritorio", "escritorios virtuales"] },
-            { category: "virtual_desktops", key: "Tecla del logotipo de Windows + Ctrl + Flecha izquierda", action: "Alternar entre los escritorios virtuales que has creado a la izquierda.", tags: ["cambiar escritorio", "escritorios virtuales"] },
-            { category: "virtual_desktops", key: "Tecla del logotipo de Windows + Ctrl + F4", action: "Cerrar el escritorio virtual que estás usando.", tags: ["cerrar escritorio", "escritorios virtuales"] },
-
-            // TASKBAR SHORTCUTS
-            { category: "taskbar", key: "Mayús + clic en un botón de la barra de tareas", action: "Abrir una aplicación o abrir rápidamente otra instancia de una aplicación.", tags: ["abrir aplicación", "barra de tareas"] },
-            { category: "taskbar", key: "Ctrl + Mayús + clic en un botón de la barra de tareas", action: "Abrir una aplicación como un administrador.", tags: ["administrador", "barra de tareas"] },
-            { category: "taskbar", key: "Mayús + clic con el botón derecho en un botón de\n la barra de tareas", action: "Mostrar el menú de la ventana de la aplicación.", tags: ["menú", "barra de tareas"] },
-            { category: "taskbar", key: "Mayús + clic con el botón derecho en un botón de\n la barra de tareas agrupadas", action: "Mostrar el menú de la ventana del grupo.", tags: ["grupo", "barra de tareas"] },
-            { category: "taskbar", key: "Ctrl + clic en un botón de la barra de tareas\n agrupadas", action: "Desplazarse a través de las ventanas del grupo.", tags: ["navegar", "barra de tareas"] },
-
-            // SETTINGS SHORTCUTS
-            { category: "settings", key: "Tecla del logotipo de Windows + I", action: "Abrir Configuración.", tags: ["configuración", "abrir"] },
-            { category: "settings", key: "Retroceso", action: "Volver a la página principal de Configuración.", tags: ["volver", "configuración"] },
-            { category: "settings", key: "Escribir en cualquier página con el cuadro de búsqueda", action: "Buscar en Configuración.", tags: ["buscar", "configuración"] }
+            // ===== VIRTUAL DESKTOPS =====
+            { category: "virtual_desktops", difficulty: "medium", key: "Win + Ctrl + D", action: "Crear escritorio virtual nuevo", tags: ["escritorio"], icon: "➕" },
+            { category: "virtual_desktops", difficulty: "medium", key: "Win + Ctrl + F4", action: "Cerrar escritorio actual", tags: ["cerrar"], icon: "❌" },
+            { category: "virtual_desktops", difficulty: "medium", key: "Win + Ctrl + ←/→", action: "Cambiar entre escritorios", tags: ["cambiar"], icon: "↔️" },
         ];
 
-        // Obtener elementos del DOM
-        const shortcutsGrid = document.getElementById('shortcutsGrid');
-        const searchInput = document.getElementById('searchInput');
-        const categoryFilter = document.getElementById('categoryFilter');
-        const categoryButtons = document.querySelectorAll('.category-button');
-        const messageModal = document.getElementById('messageModal');
-        const modalMessage = document.getElementById('modalMessage');
+        // Estado de la aplicación
+        let appState = {
+            favorites: JSON.parse(localStorage.getItem('favoriteShortcuts')) || {},
+            learned: JSON.parse(localStorage.getItem('learnedShortcuts')) || {},
+            stats: JSON.parse(localStorage.getItem('userStats')) || {
+                totalPoints: 0,
+                quizzesTaken: 0,
+                streak: 0,
+                level: 1
+            }
+        };
 
-        // Estado para almacenar atajos favoritos (simulado con localStorage)
-        let favorites = JSON.parse(localStorage.getItem('favoriteShortcuts')) || {};
+        // Inicializar la app
+        document.addEventListener('DOMContentLoaded', () => {
+            renderShortcuts(shortcuts);
+            updateStats();
+            
+            // Event listeners para botones principales
+            document.getElementById('btnQuiz').addEventListener('click', showQuiz);
+            document.getElementById('btnStats').addEventListener('click', showStats);
+            
+            // Event listeners para cerrar modales
+            document.getElementById('btnCloseQuiz').addEventListener('click', closeQuiz);
+            document.getElementById('btnCloseStats').addEventListener('click', closeStats);
+            document.getElementById('btnRestartQuiz').addEventListener('click', restartQuiz);
+            
+            // Event listeners para botones de categoría
+            document.querySelectorAll('.category-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const category = this.getAttribute('data-category');
+                    selectCategory(category);
+                });
+            });
+            
+            // Event listeners para filtros
+            document.getElementById('searchInput').addEventListener('keyup', filterShortcuts);
+            document.getElementById('categoryFilter').addEventListener('change', filterShortcuts);
+            document.getElementById('difficultyFilter').addEventListener('change', filterShortcuts);
+        });
 
-        /**
-         * Muestra un modal con un mensaje.
-         * @param {string} message - El mensaje a mostrar en el modal.
-         */
-        function showModal(message) {
-            modalMessage.textContent = message;
-            messageModal.classList.remove('hidden');
-        }
-
-        /**
-         * Oculta el modal de mensajes.
-         */
-        function hideModal() {
-            messageModal.classList.add('hidden');
-        }
-
-        /**
-         * Renderiza los atajos de teclado en la cuadrícula.
-         * @param {Array} shortcutsToRender - El array de atajos a renderizar.
-         */
+        // Renderizar shortcuts
         function renderShortcuts(shortcutsToRender) {
-            shortcutsGrid.innerHTML = ''; // Limpiar cuadrícula existente
+            const grid = document.getElementById('shortcutsGrid');
+            grid.innerHTML = '';
+
             if (shortcutsToRender.length === 0) {
-                shortcutsGrid.innerHTML = '<p class="text-center text-xl col-span-full text-gray-400">No se encontraron atajos para tu búsqueda.</p>';
+                grid.innerHTML = `
+                    <div class="col-span-full text-center py-12">
+                        <div class="text-6xl mb-4">😕</div>
+                        <p class="text-xl text-white">No se encontraron atajos</p>
+                        <p class="text-gray-400">Intenta con otra búsqueda</p>
+                    </div>
+                `;
                 return;
             }
 
-            shortcutsToRender.forEach(shortcut => {
-                const isFavorite = favorites[shortcut.key];
+            shortcutsToRender.forEach((shortcut, index) => {
+                const isFavorite = appState.favorites[shortcut.key];
+                const isLearned = appState.learned[shortcut.key];
+                const difficultyClass = `difficulty-${shortcut.difficulty}`;
+                const difficultyText = {
+                    easy: '🟢 Básico',
+                    medium: '🟡 Intermedio',
+                    hard: '🔴 Avanzado'
+                };
+
                 const card = document.createElement('div');
-                card.className = 'shortcut-card p-6 flex flex-col justify-between';
+                card.className = `shortcut-card p-6 fade-in ${difficultyClass}`;
+                card.style.animationDelay = `${index * 0.05}s`;
                 card.innerHTML = `
-                    <div>
-                        <h3 class="text-xl font-bold mb-2 text-purple-300">${shortcut.key}</h3>
-                        <p class="text-gray-300">${shortcut.action}</p>
+                    <div class="flex justify-between items-start mb-4">
+                        <span class="text-3xl">${shortcut.icon || '⌨️'}</span>
+                        <div class="flex gap-2">
+                            <button 
+                                data-key="${index}" 
+                                data-action="learned"
+                                class="btn-action text-2xl ${isLearned ? 'text-green-400' : 'text-gray-600'} hover:scale-110 transition-transform"
+                                title="${isLearned ? 'Marcar como no aprendido' : 'Marcar como aprendido'}">
+                                <i class="${isLearned ? 'fas' : 'far'} fa-check-circle"></i>
+                            </button>
+                            <button 
+                                data-key="${index}"
+                                data-action="favorite"
+                                class="btn-action text-2xl ${isFavorite ? 'text-yellow-400' : 'text-gray-600'} hover:scale-110 transition-transform"
+                                title="${isFavorite ? 'Quitar de favoritos' : 'Agregar a favoritos'}">
+                                <i class="${isFavorite ? 'fas' : 'far'} fa-star"></i>
+                            </button>
+                        </div>
                     </div>
-                    <button class="favorite-btn mt-4 self-end text-2xl ${isFavorite ? 'active' : ''}" data-key="${shortcut.key}" onclick="toggleFavorite('${shortcut.key}', this)">
-                        <i class="${isFavorite ? 'fas' : 'far'} fa-star"></i>
-                    </button>
+                    <div class="mb-3">
+                        <span class="level-badge">${difficultyText[shortcut.difficulty]}</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-purple-300 mb-2 font-mono">${shortcut.key}</h3>
+                    <p class="text-gray-300 text-sm leading-relaxed">${shortcut.action}</p>
                 `;
-                shortcutsGrid.appendChild(card);
+                grid.appendChild(card);
+            });
+
+            // Agregar event listeners a los botones
+            document.querySelectorAll('.btn-action').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const index = parseInt(this.getAttribute('data-key'));
+                    const action = this.getAttribute('data-action');
+                    const shortcut = shortcutsToRender[index];
+                    
+                    if (action === 'learned') {
+                        toggleLearned(shortcut.key);
+                    } else if (action === 'favorite') {
+                        toggleFavorite(shortcut.key);
+                    }
+                });
             });
         }
 
-        /**
-         * Filtra y busca atajos según la entrada del usuario y la categoría seleccionada.
-         */
+        // Filtrar shortcuts
         function filterShortcuts() {
-            const searchTerm = searchInput.value.toLowerCase();
-            const selectedCategory = categoryFilter.value;
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const category = document.getElementById('categoryFilter').value;
+            const difficulty = document.getElementById('difficultyFilter').value;
 
             const filtered = shortcuts.filter(shortcut => {
-                const matchesSearch = shortcut.key.toLowerCase().includes(searchTerm) ||
-                                      shortcut.action.toLowerCase().includes(searchTerm) ||
-                                      (shortcut.tags && shortcut.tags.some(tag => tag.toLowerCase().includes(searchTerm)));
+                const matchesSearch = 
+                    shortcut.key.toLowerCase().includes(searchTerm) ||
+                    shortcut.action.toLowerCase().includes(searchTerm) ||
+                    (shortcut.tags && shortcut.tags.some(tag => tag.includes(searchTerm)));
 
-                // Nueva lógica para el filtro de favoritos
-                if (selectedCategory === 'favorites') {
-                    return favorites[shortcut.key] && matchesSearch;
-                }
+                const matchesCategory = 
+                    category === 'all' || 
+                    shortcut.category === category ||
+                    (category === 'favorites' && appState.favorites[shortcut.key]);
 
-                const matchesCategory = selectedCategory === 'all' || shortcut.category === selectedCategory;
-                return matchesSearch && matchesCategory;
+                const matchesDifficulty = 
+                    difficulty === 'all' || 
+                    shortcut.difficulty === difficulty;
+
+                return matchesSearch && matchesCategory && matchesDifficulty;
             });
 
             renderShortcuts(filtered);
         }
 
-        /**
-         * Cambia la categoría de atajos mostrada y actualiza los botones de categoría.
-         * @param {string} category - La categoría a seleccionar.
-         */
+        // Seleccionar categoría
         function selectCategory(category) {
-            // Actualizar el valor del selector de categoría para sincronizarlo
-            categoryFilter.value = category;
-
-            categoryButtons.forEach(button => {
-                if (button.dataset.category === category) {
-                    button.classList.add('active');
-                } else {
-                    button.classList.remove('active');
+            document.getElementById('categoryFilter').value = category;
+            document.querySelectorAll('.category-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.getAttribute('data-category') === category) {
+                    btn.classList.add('active');
                 }
             });
-            filterShortcuts(); // Volver a filtrar con la nueva categoría
+            filterShortcuts();
         }
 
-        /**
-         * Alterna el estado de favorito de un atajo y lo guarda en localStorage.
-         * @param {string} key - La clave del atajo (su texto).
-         * @param {HTMLElement} buttonElement - El elemento del botón de favorito.
-         */
-        function toggleFavorite(key, buttonElement) {
-            if (favorites[key]) {
-                delete favorites[key];
-                buttonElement.classList.remove('active');
-                buttonElement.innerHTML = '<i class="far fa-star"></i>';
-                showModal('¡Atajo quitado de favoritos! 😢');
+        // Toggle favorito
+        function toggleFavorite(key) {
+            if (appState.favorites[key]) {
+                delete appState.favorites[key];
             } else {
-                favorites[key] = true;
-                buttonElement.classList.add('active');
-                buttonElement.innerHTML = '<i class="fas fa-star"></i>';
-                showModal('¡Atajo añadido a favoritos! 🎉');
+                appState.favorites[key] = true;
+                appState.stats.totalPoints += 5;
             }
-            localStorage.setItem('favoriteShortcuts', JSON.stringify(favorites));
-            // Si el filtro actual es 'favorites', necesitamos volver a filtrar para actualizar la vista
-            if (categoryFilter.value === 'favorites') {
-                filterShortcuts();
-            }
+            localStorage.setItem('favoriteShortcuts', JSON.stringify(appState.favorites));
+            localStorage.setItem('userStats', JSON.stringify(appState.stats));
+            updateStats();
+            filterShortcuts();
         }
 
-        // Renderizar todos los atajos al cargar la página
-        document.addEventListener('DOMContentLoaded', () => {
-            try {
-                // Para depuración: verifica si el array de atajos está cargado
-                console.log("Atajos cargados:", shortcuts.length);
-                renderShortcuts(shortcuts);
-            } catch (error) {
-                console.error("Error al renderizar atajos en DOMContentLoaded:", error);
-                shortcutsGrid.innerHTML = '<p class="text-center text-xl col-span-full text-red-400">¡Oops! Hubo un error al cargar los atajos. Por favor, revisa la consola para más detalles.</p>';
+        // Toggle aprendido
+        function toggleLearned(key) {
+            if (appState.learned[key]) {
+                delete appState.learned[key];
+                appState.stats.totalPoints -= 10;
+            } else {
+                appState.learned[key] = true;
+                appState.stats.totalPoints += 10;
+                
+                // Subir de nivel cada 10 atajos aprendidos
+                const learnedCount = Object.keys(appState.learned).length;
+                appState.stats.level = Math.floor(learnedCount / 10) + 1;
+            }
+            localStorage.setItem('learnedShortcuts', JSON.stringify(appState.learned));
+            localStorage.setItem('userStats', JSON.stringify(appState.stats));
+            updateStats();
+            filterShortcuts();
+        }
+
+        // Actualizar estadísticas
+        function updateStats() {
+            document.getElementById('totalLearned').textContent = Object.keys(appState.learned).length;
+            document.getElementById('totalFavorites').textContent = Object.keys(appState.favorites).length;
+            document.getElementById('streakDays').textContent = appState.stats.streak || 0;
+            document.getElementById('userLevel').textContent = appState.stats.level || 1;
+        }
+
+        // Quiz functions
+        let currentQuiz = [];
+        let currentQuestionIndex = 0;
+        let quizScore = 0;
+
+        function showQuiz() {
+            // Seleccionar 10 shortcuts aleatorios
+            const shuffled = shortcuts.sort(() => 0.5 - Math.random());
+            currentQuiz = shuffled.slice(0, 10);
+            currentQuestionIndex = 0;
+            quizScore = 0;
+
+            document.getElementById('quizModal').classList.remove('hidden');
+            document.getElementById('quizModal').classList.add('flex');
+            document.getElementById('quizResult').classList.add('hidden');
+            
+            showQuestion();
+        }
+
+        function showQuestion() {
+            if (currentQuestionIndex >= currentQuiz.length) {
+                showQuizResult();
+                return;
+            }
+
+            const question = currentQuiz[currentQuestionIndex];
+            const options = generateOptions(question);
+            
+            document.getElementById('quizContent').innerHTML = `
+                <div class="mb-6">
+                    <div class="text-sm text-gray-400 mb-2">Pregunta ${currentQuestionIndex + 1} de ${currentQuiz.length}</div>
+                    <h3 class="text-2xl font-bold text-white mb-4">¿Qué hace este atajo?</h3>
+                    <div class="bg-gray-700 rounded-xl p-6 text-center mb-6">
+                        <span class="text-3xl font-bold text-purple-300 font-mono">${question.key}</span>
+                    </div>
+                </div>
+                <div class="space-y-3" id="quizOptions">
+                    ${options.map((option, idx) => `
+                        <div class="quiz-option" data-correct="${idx === 0}" data-index="${idx}">
+                            <p class="text-white">${option}</p>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+            
+            // Agregar event listeners a las opciones
+            document.querySelectorAll('.quiz-option').forEach(opt => {
+                opt.addEventListener('click', function() {
+                    const isCorrect = this.getAttribute('data-correct') === 'true';
+                    checkAnswer(isCorrect, this);
+                });
+            });
+        }
+
+        function generateOptions(correctShortcut) {
+            const options = [correctShortcut.action];
+            const wrongOptions = shortcuts
+                .filter(s => s.key !== correctShortcut.key)
+                .sort(() => 0.5 - Math.random())
+                .slice(0, 3)
+                .map(s => s.action);
+            
+            return [...options, ...wrongOptions].sort(() => 0.5 - Math.random());
+        }
+
+        function checkAnswer(isCorrect, element) {
+            const allOptions = document.querySelectorAll('.quiz-option');
+            allOptions.forEach(opt => opt.style.pointerEvents = 'none');
+
+            if (isCorrect) {
+                element.classList.add('correct');
+                quizScore++;
+                appState.stats.totalPoints += 20;
+            } else {
+                element.classList.add('incorrect');
+            }
+
+            setTimeout(() => {
+                currentQuestionIndex++;
+                showQuestion();
+            }, 1500);
+        }
+
+        function showQuizResult() {
+            document.getElementById('quizContent').style.display = 'none';
+            document.getElementById('quizResult').classList.remove('hidden');
+            document.getElementById('quizScore').textContent = quizScore;
+            document.getElementById('quizTotal').textContent = currentQuiz.length;
+            
+            appState.stats.quizzesTaken++;
+            localStorage.setItem('userStats', JSON.stringify(appState.stats));
+            updateStats();
+        }
+
+        function restartQuiz() {
+            document.getElementById('quizContent').style.display = 'block';
+            showQuiz();
+        }
+
+        function closeQuiz() {
+            document.getElementById('quizModal').classList.add('hidden');
+            document.getElementById('quizModal').classList.remove('flex');
+        }
+
+        // Stats modal
+        function showStats() {
+            document.getElementById('statsModal').classList.remove('hidden');
+            document.getElementById('statsModal').classList.add('flex');
+            
+            const learnedCount = Object.keys(appState.learned).length;
+            const totalShortcuts = shortcuts.length;
+            const percentage = (learnedCount / totalShortcuts * 100).toFixed(1);
+            
+            document.getElementById('statsLearned').textContent = `${learnedCount}/${totalShortcuts}`;
+            document.getElementById('statsProgressBar').style.width = `${percentage}%`;
+            document.getElementById('statsTotalPoints').textContent = appState.stats.totalPoints || 0;
+            document.getElementById('statsQuizzesTaken').textContent = appState.stats.quizzesTaken || 0;
+            
+            // Achievements
+            const achievements = [
+                { icon: '🎯', name: 'Primer Atajo', unlocked: learnedCount >= 1 },
+                { icon: '🔥', name: '10 Atajos', unlocked: learnedCount >= 10 },
+                { icon: '⭐', name: '25 Atajos', unlocked: learnedCount >= 25 },
+                { icon: '💎', name: '50 Atajos', unlocked: learnedCount >= 50 },
+                { icon: '🏆', name: 'Maestro', unlocked: learnedCount >= 100 },
+                { icon: '🎓', name: 'Quiz Pro', unlocked: appState.stats.quizzesTaken >= 5 },
+            ];
+            
+            document.getElementById('achievementsList').innerHTML = achievements.map(ach => `
+                <div class="bg-gray-600 rounded-lg p-3 text-center ${ach.unlocked ? '' : 'opacity-30'}">
+                    <div class="text-2xl mb-1">${ach.icon}</div>
+                    <div class="text-xs text-gray-300">${ach.name}</div>
+                </div>
+            `).join('');
+        }
+
+        function closeStats() {
+            document.getElementById('statsModal').classList.add('hidden');
+            document.getElementById('statsModal').classList.remove('flex');
+        }
+
+        // Cerrar modales con ESC
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeQuiz();
+                closeStats();
             }
         });
     </script>
 </body>
 </html>
-
